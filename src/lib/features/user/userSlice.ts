@@ -10,7 +10,7 @@ interface UserState {
 }
 
 const initialState: UserState = {
-  name: '',
+  name: 'alejandro',
   email: '',
   token: '',
   _id: '',

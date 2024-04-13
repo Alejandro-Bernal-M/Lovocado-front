@@ -11,9 +11,17 @@ export default function Session() {
   // const {token} = useAppSelector((state) => state.user);
   return (
     <div>
-      <button onClick={() => setSignin(true)}>Signin </button>
-      <button onClick={() => setSignin(false)}>Signup </button>
-      {signin ? <Signin /> : <Signup />}
+      {signin ?
+        <>
+          <Signin /> 
+          <button onClick={() => setSignin(false)}>Do not have an account? Signup </button>
+        </>
+        :
+        <>
+          <Signup />
+          <button onClick={() => setSignin(true)}>Already have an account? Signin </button>
+        </>
+        }
     </div>
   );
 }
