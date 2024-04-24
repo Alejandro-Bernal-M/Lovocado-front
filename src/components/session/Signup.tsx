@@ -1,9 +1,11 @@
+import apiEndPoints from "@/utils/routes";
+
 export default function Signup() {
   function handleSignup(e: any) {
     e.preventDefault();
     const data = new FormData(e.target);
     try {
-      fetch(process.env.NEXT_PUBLIC_API + "/signup", {
+      fetch(apiEndPoints.signup, {
         method: "POST",
         body: data,
       })
