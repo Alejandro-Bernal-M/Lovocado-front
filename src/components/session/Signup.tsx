@@ -1,6 +1,10 @@
 import apiEndPoints from "@/utils/routes";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { signIn } from "@/lib/features/user/userSlice";
 
 export default function Signup() {
+  const {user} = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
   function validatePasswordSecurity() {
     const password = document.querySelector('input[name="password"]') as HTMLInputElement
     if(password.value.length < 8){
@@ -21,7 +25,7 @@ export default function Signup() {
       passwordConfirmation.style.borderColor = 'green'
     }
   }
-  
+
   function validatePassword(password: string, passwordConfirmation: string) {
     if(password !== passwordConfirmation){
       return false
@@ -43,10 +47,18 @@ export default function Signup() {
         method: "POST",
         body: data,
       })
-        .then((res) => {
+        .then(async (res) => {
           if(res.ok){
             e.target.reset()
-            return res.json()
+            const password = document.querySelector('input[name="password"]') as HTMLInputElement
+            const passwordConfirmation = document.querySelector('input[name="passwordConfirmation"]') as HTMLInputElement
+            password.style.borderColor = 'black'
+            passwordConfirmation.style.borderColor = 'black'      
+            const data = await res.json()
+            dispatch(signIn(data))
+            localStorage.setItem('token', data.token)
+            localStorage.setItem('user', JSON.stringify(data.user))
+            return
           }else{
             throw new Error('error')
           }

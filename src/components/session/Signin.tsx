@@ -1,6 +1,12 @@
 import apiEndPoints from "@/utils/routes";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { signIn } from "@/lib/features/user/userSlice";
+
 
 export default function Signin() {
+  const {user} = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
+
   function handleSignin(e: any) {
     e.preventDefault();
     const data = new FormData(e.target);
@@ -10,7 +16,6 @@ export default function Signin() {
       email,
       password
     }
-    console.log(body)
     console.log(data.get('email'))
     try {
       fetch(apiEndPoints.signin, {
@@ -23,7 +28,11 @@ export default function Signin() {
         .then(async(res) => {
           if(res.ok){
             e.target.reset()
-            return res.json()
+            const data = await res.json()
+            dispatch(signIn(data))
+            localStorage.setItem('token', data.token)
+            localStorage.setItem('user', JSON.stringify(data.user))
+            return 
           }else if(res.status === 400){
             console.log('error')
             let data = await res.json()
@@ -51,6 +60,8 @@ export default function Signin() {
 
         <button >Signin</button>
       </form>
+      {user.firstName && <h2> Welcome {user.firstName}</h2>}
+      
     </div>
   );
 }
