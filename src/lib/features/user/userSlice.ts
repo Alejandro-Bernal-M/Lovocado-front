@@ -1,20 +1,27 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { sign } from 'crypto';
 
 interface UserState {
-  name: string;
-  email: string;
+  user: {
+    firstName: string;
+    lastName: string;
+    fullName: string;
+    email: string;
+    _id: string;
+    role: string;
+  };
   token: string;
-  _id: string;
-  role: string;
 }
 
 const initialState: UserState = {
-  name: 'alejandro',
-  email: '',
+  user: {
+    firstName: 'emil',
+    lastName: 'cioran',
+    fullName: 'emil cioran',
+    email: '',
+    _id: '',
+    role: '',
+  },
   token: '',
-  _id: '',
-  role: '',
 };
 
 const userSlice = createSlice({
@@ -22,18 +29,27 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     signIn(state, action: PayloadAction<UserState>) {
-      state.name = action.payload.name;
-      state.email = action.payload.email;
+      console.log('action.payload', action.payload)
+      state.user.firstName = action.payload.user.firstName;
+      state.user.lastName = action.payload.user.lastName;
+      state.user.fullName = action.payload.user.fullName;
+      state.user.email = action.payload.user.email;
+      state.user._id = action.payload.user._id;
+      state.user.role = action.payload.user.role;
       state.token = action.payload.token;
-      state._id = action.payload._id;
-      state.role = action.payload.role;
     },
     signOut(state) {
-      state.name = '';
-      state.email = '';
+      state.user = {
+        firstName: '',
+        lastName: '',
+        fullName: '',
+        email: '',
+        _id: '',
+        role: '',
+      };
       state.token = '';
-      state._id = '';
-      state.role = '';
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
     },
   },
 });
