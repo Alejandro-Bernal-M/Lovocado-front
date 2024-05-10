@@ -1,7 +1,52 @@
+'use client'
 import styles from './Navbar.module.css';
 import Link from 'next/link';
+import { useAppSelector, useAppDispatch} from "../../lib/hooks";
+import { signOut, signIn } from '@/lib/features/user/userSlice';
+import { useEffect } from 'react';
+import { usePathname } from 'next/navigation'
 
 export default function Navbar() {
+  const {user} = useAppSelector((state) => state.user);
+  const {token} = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
+  const pathName = usePathname();
+  const allowedRoutes = ['/session', '/', '/products'];
+
+  const handleSignOut = () => {
+    dispatch(signOut());
+  }
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') { // Check if running in the browser
+      if (token === '' && user.email === '') {
+        const storageToken = window.localStorage.getItem('token');
+        const storageUser = window.localStorage.getItem('user');
+        if (storageToken && storageUser) {
+          dispatch(signIn({ token: storageToken, user: JSON.parse(storageUser) }));
+        }
+      }
+    }
+  }, []);
+
+  function secureRoute() {
+    if (user.email === '' && !allowedRoutes.includes(pathName)) {
+      window.location.href = '/session';
+    }
+  }
+
+  function adminRoute() {
+    if (user.role !== 'admin' && pathName.includes('/admin')) {
+      window.location.href = '/';
+    }
+  }
+
+  useEffect(() => {
+    secureRoute();
+    adminRoute();
+  }
+  , [pathName]);
+  
   return (
     <nav className={styles.navbar}>
       <div className={styles.navbar__logo} >logo</div>
@@ -13,8 +58,18 @@ export default function Navbar() {
           <Link href="/products">Products</Link>
         </li>
         <li className={styles.navbar__link}>
-          <Link href="/session">Signin</Link>
+          {token ? (
+            <button onClick={handleSignOut}>Signout</button>
+          ) : (
+            <Link href="/session">Signin</Link>
+          )
+        }
         </li>
+        { user.role === 'admin' && (
+          <li className={styles.navbar__link}>
+            <Link href="/admin" >Admin</Link>
+          </li>
+        )}
       </ul>
     </nav>
   );
