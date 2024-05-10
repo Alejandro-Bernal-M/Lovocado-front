@@ -1,6 +1,7 @@
 import apiEndPoints from "@/utils/routes";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { signIn } from "@/lib/features/user/userSlice";
+import { useState } from "react";
 
 export default function Signup() {
   const {user} = useAppSelector((state) => state.user);
@@ -73,6 +74,8 @@ export default function Signup() {
     }
   }
 
+  const [admin, setAdmin] = useState(false);
+
   return (
     <div>
       <h1> Signup Page tittle</h1>
@@ -85,9 +88,12 @@ export default function Signup() {
         <input name="password" type="password" placeholder="password" onKeyUp={validatePasswordSecurity}/>
         <input name="passwordConfirmation" type="password" placeholder="password confirmation" onKeyUp={validatePasswordMatch}/>
         <input name="profileImage" type="file" />
+        <input name="role" type="hidden" value={admin ? 'admin' : 'user'} readOnly />
+        <input name="adminPassword" type="text" placeholder="admin password" style={admin ? {display: 'block'} : {display: 'none'}}/>
 
         <button >Signup</button>
       </form>
+      <button onClick={() => setAdmin(!admin)}>Admin</button>
     </div>
   );
 }
