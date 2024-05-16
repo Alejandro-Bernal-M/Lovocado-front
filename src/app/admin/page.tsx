@@ -10,6 +10,9 @@ export default function AdminPage() {
           <li>
             <Link href="/admin/products">Products</Link>
           </li>
+          <li>
+            <Link href="/admin/categories">Categories</Link>
+          </li>
         </ul>
       </div>
     </div>
