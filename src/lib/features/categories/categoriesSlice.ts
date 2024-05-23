@@ -39,7 +39,8 @@ const createCategory = createAsyncThunk(
       });
       if (response.status == 400) {
         console.log('Please sign in to create a category')
-        //dispatch(signOut());
+        dispatch(signOut());
+        window.location.href = '/';
         return
       }
       return response.json();
