@@ -1,16 +1,13 @@
 'use client'
-import { useEffect, useState } from 'react';
-import { getCategories } from '@/lib/features/categories/categoriesSlice';
-import { useAppDispatch, useAppSelector } from '@/lib/hooks';
+import { useState } from 'react';
+import { useAppSelector } from '@/lib/hooks';
 import CreateCategoryPopup from '@/components/createCategoryPopup/createCategoryPopup';
 
 export default function AdminProducts() {
-  const dispatch = useAppDispatch();
+
   const {categories, loading, error} = useAppSelector((state) => state.categories);
   const [displayCategoryPopup, setDisplayCategoryPopup] = useState(false);
-  useEffect(() => {
-    dispatch(getCategories());
-  }, []);
+
   console.log('categories',categories);
 
   return (
