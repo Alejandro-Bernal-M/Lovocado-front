@@ -55,4 +55,4 @@ const userSlice = createSlice({
 });
 
 export const { signIn, signOut } = userSlice.actions;
-export default userSlice;
+export default userSlice.reducer;

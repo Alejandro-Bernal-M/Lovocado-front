@@ -11,7 +11,7 @@ export default function Navbar() {
   const {token} = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const pathName = usePathname();
-  const allowedRoutes = ['/session', '/', '/products'];
+  const allowedRoutes = ['/session', '/', '/products', '/cart'];
 
   const handleSignOut = () => {
     dispatch(signOut());
@@ -56,6 +56,9 @@ export default function Navbar() {
         </li>
         <li className={styles.navbar__link}>
           <Link href="/products">Products</Link>
+        </li>
+        <li className={styles.navbar__link}>
+          <Link href="/cart">Cart</Link>
         </li>
         <li className={styles.navbar__link}>
           {token ? (

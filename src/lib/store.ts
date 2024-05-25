@@ -2,13 +2,15 @@ import { configureStore } from '@reduxjs/toolkit'
 import userSlice from './features/user/userSlice'
 import productsSlice from './features/products/productsSlice'
 import categoriesSlice from './features/categories/categoriesSlice'
+import cartSlice from './features/cart/cartSlice'
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
-      user: userSlice.reducer,
-      products : productsSlice.reducer,
-      categories: categoriesSlice.reducer
+      user: userSlice,
+      products : productsSlice,
+      categories: categoriesSlice,
+      cart: cartSlice
     }
   })
 }

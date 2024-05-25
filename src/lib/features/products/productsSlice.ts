@@ -151,4 +151,4 @@ const productsSlice = createSlice({
 });
 
 export { getAllProducts, getProduct, createProduct, updateProduct, deleteProduct };
-export default productsSlice;
+export default productsSlice.reducer;

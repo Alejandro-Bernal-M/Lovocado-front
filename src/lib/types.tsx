@@ -18,4 +18,10 @@ interface Category {
   _id?: string;
 }
 
-export type { Product as ProductType, Category };
+interface CartState {
+  items: [{_id: string, quantity: number, price: number}];
+  totalProducts: number,
+  totalPrices: number,
+}
+
+export type { Product as ProductType, Category, CartState };
