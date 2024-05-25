@@ -1,21 +1,10 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import apiEndPoints from "../../../utils/routes";
 import { signOut } from "../user/userSlice";
-
-interface Product {
-  name: string;
-  description: string;
-  price: number;
-  quantity: number;
-  category: string;
-  productImages?: [{img: string, id: string}];
-  createdAt?: string;
-  createdBy?: {firstName: string, lastName: string, _id: string, fullName: string};
-  _id?: string;
-}
+import { ProductType } from "../../types";
 
 const initialState = {
-  products: [] as Product[],
+  products: [] as ProductType[],
   loading: false,
   error: null as any,
 };

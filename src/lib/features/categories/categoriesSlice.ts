@@ -1,14 +1,7 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 import apiEndPoints from "../../../utils/routes";
 import { signOut } from "../user/userSlice";
-
-interface Category {
-  name: string;
-  categoryImage: string
-  parentId?: string;
-  slug?: string;
-  _id?: string;
-}
+import { Category } from "../../types";
 
 const initialState = {
   categories: [] as Category[],
