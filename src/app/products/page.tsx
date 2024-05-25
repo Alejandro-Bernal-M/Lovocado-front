@@ -14,17 +14,23 @@ export default function Products() {
   const { categories } = useAppSelector((state) => state.categories);
   const [selectedProducts, setSelectedProducts] = useState<ProductType[]>([]);
   const [ loadingProducts, setLoadingProducts ] = useState(false);
+  const [categoryTittle, setCategoryTittle] = useState('' as string);
 
-  const handleSelect = (id: any) => {
+  const handleSelect = (id: any, name: string) => {
     setLoadingProducts(true);
     let filteredProducts = products.filter((product) => product.category === id);
     setSelectedProducts(filteredProducts);
+    setCategoryTittle(name);
     setLoadingProducts(false);
   }
 
   useEffect(() => {
     dispatch(getCategories());
     dispatch(getAllProducts());
+    let firstCategoryButton = document.querySelector('.cat_li') as HTMLLIElement;
+    if (firstCategoryButton) {
+      firstCategoryButton.click();
+    }
   }, []);
 
   return (
@@ -33,10 +39,11 @@ export default function Products() {
       { categories.length > 0 && (
         <ul className={styles.cat_ul}>
           {categories.map((category) => (
-            <li key={category._id} onClick={() => {handleSelect(category._id)}}>{category.name}</li>
+            <li className="cat_li" key={category._id} onClick={() => {handleSelect(category._id, category.name)}}>{category.name}</li>
           ))}
         </ul>
       )}
+      <h2>{categoryTittle} products</h2>
       {loadingProducts && <p>Loading...</p>}
       {error && <p> We had an error loading our products, please try again</p>}
       <div className={styles.products}>
