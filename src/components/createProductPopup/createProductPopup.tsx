@@ -57,6 +57,10 @@ export default function CreateProductPopup() {
           ))}
         </select>
 
+        <label htmlFor="offer">Discount</label>
+        <input type="number" name="offer" min={0} max={100}/>
+
+
         <button type="submit">Create Product</button>
       </form>
     </div>

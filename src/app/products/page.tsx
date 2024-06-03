@@ -18,7 +18,7 @@ export default function Products() {
 
   const handleSelect = (id: any, name: string) => {
     setLoadingProducts(true);
-    let filteredProducts = products.filter((product) => product.category === id);
+    let filteredProducts = products.filter((product) => product.category._id === id);
     setSelectedProducts(filteredProducts);
     setCategoryTittle(name);
     setLoadingProducts(false);
@@ -32,6 +32,7 @@ export default function Products() {
       firstCategoryButton.click();
     }
   }, []);
+  console.log('products', products)
 
   return (
     <div>

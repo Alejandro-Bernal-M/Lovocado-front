@@ -1,19 +1,26 @@
 import type { ProductType } from '@/lib/types';
-import strict from './product.module.css';
+import styles from './product.module.css';
 import { useState } from 'react';
+import { usePathname } from 'next/navigation'
 
 export default function Product(product: ProductType){
   const [currentImage, setCurrentImage] = useState(0);
+  const pathname = usePathname();
   return(
     <div>
       <h2>{product.name}</h2>
-      <p>Created by: {product.createdBy?.firstName}</p>
+      {pathname === '/admin/products' && (
+        <>
+          <p>Category: {product.category?.name}</p>
+          <p>Created by: {product.createdBy?.firstName}</p>
+        </>
+      )}
       {product.productImages && (
         <>
           {product.productImages.length > 1 && currentImage > 0 && (
             <button onClick={() => {setCurrentImage(currentImage - 1)}} >Previous Image</button>
           )}
-          <img src={`${process.env.NEXT_PUBLIC_IMAGES}/${product.productImages[currentImage].img}`} alt={product.name} className={strict.product_image}/>
+          <img src={`${process.env.NEXT_PUBLIC_IMAGES}/${product.productImages[currentImage].img}`} alt={product.name} className={styles.product_image}/>
           {product.productImages.length > 1 && currentImage +1 < product.productImages.length && (
             <button onClick={() => {setCurrentImage(currentImage + 1)}} >Next Image</button>
           )
@@ -21,7 +28,8 @@ export default function Product(product: ProductType){
         </>
       )}
       <p>{product.description}</p>
-      <p>Price: {product.price}</p>
+      {product.offer && <p>Offer: {product.offer}%</p>}
+      <p>Price: {product.offer ? (product.price - product.price * product.offer /100 ): product.price }</p>
       <p>Quantity: {product.quantity}</p>
     </div>
   )

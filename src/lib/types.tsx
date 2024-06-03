@@ -3,7 +3,8 @@ interface Product {
   description: string;
   price: number;
   quantity: number;
-  category: string;
+  category: {name: string, _id: string};
+  offer?: number;
   productImages?: [{img: string, id: string}];
   createdAt?: string;
   createdBy?: {firstName: string, lastName: string, _id: string, fullName: string};
