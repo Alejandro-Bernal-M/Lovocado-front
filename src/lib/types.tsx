@@ -19,10 +19,18 @@ interface Category {
   _id?: string;
 }
 
+interface productCart {
+  _id: string;
+  quantity: number;
+  price: number;
+  offer: number;
+}
+
 interface CartState {
-  items: [{_id: string, quantity: number, price: number}];
+  items: productCart [];
   totalProducts: number,
   totalPrices: number,
+  showCart: boolean,
 }
 
 export type { Product as ProductType, Category, CartState };

@@ -2,10 +2,30 @@ import type { ProductType } from '@/lib/types';
 import styles from './product.module.css';
 import { useState } from 'react';
 import { usePathname } from 'next/navigation'
+import { addItem} from '@/lib/features/cart/cartSlice';
+import { useAppDispatch } from '@/lib/hooks';
 
 export default function Product(product: ProductType){
+  const dispatch = useAppDispatch();
   const [currentImage, setCurrentImage] = useState(0);
   const pathname = usePathname();
+  const [productQuantity, setProductQuantity] = useState(1);
+  function handleAddToCart() {
+    if(productQuantity == 0) return;
+    if(productQuantity > product.quantity) {
+      alert('The quantity you want to add is greater than the quantity available');
+      return;
+    }
+    let productWithQuantity = {...product, quantity: productQuantity};
+
+    dispatch(addItem(productWithQuantity));
+    if(pathname === '/products') {
+      alert('Product added to cart');
+    }
+
+    setProductQuantity(1);
+
+  }
   return(
     <div>
       <h2>{product.name}</h2>
@@ -30,7 +50,12 @@ export default function Product(product: ProductType){
       <p>{product.description}</p>
       {product.offer && <p>Offer: {product.offer}%</p>}
       <p>Price: {product.offer ? (product.price - product.price * product.offer /100 ): product.price }</p>
-      <p>Quantity: {product.quantity}</p>
+      <p>Quantity available: {product.quantity}</p>
+
+      <span>Select the quantity to add</span>
+      <input type="number" max={product.quantity} value={productQuantity} onChange={(e) => setProductQuantity(parseInt(e.target.value))} />
+      <button onClick={() => {handleAddToCart()}}>Add to Cart</button>
+
     </div>
   )
 }

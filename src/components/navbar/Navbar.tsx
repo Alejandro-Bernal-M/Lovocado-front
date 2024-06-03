@@ -5,6 +5,8 @@ import { useAppSelector, useAppDispatch} from "../../lib/hooks";
 import { signOut, signIn } from '@/lib/features/user/userSlice';
 import { useEffect } from 'react';
 import { usePathname } from 'next/navigation'
+import { hideCart, displayCart } from '@/lib/features/cart/cartSlice';
+import CartPopup from '../cart/cartPopup';
 
 export default function Navbar() {
   const {user} = useAppSelector((state) => state.user);
@@ -12,6 +14,7 @@ export default function Navbar() {
   const dispatch = useAppDispatch();
   const pathName = usePathname();
   const allowedRoutes = ['/session', '/', '/products', '/cart'];
+  const { showCart } = useAppSelector((state) => state.cart);
 
   const handleSignOut = () => {
     dispatch(signOut());
@@ -58,8 +61,9 @@ export default function Navbar() {
           <Link href="/products">Products</Link>
         </li>
         <li className={styles.navbar__link}>
-          <Link href="/cart">Cart</Link>
+          <button onClick={() => showCart ? dispatch(hideCart()) : dispatch(displayCart())}>Cart</button>
         </li>
+        {showCart && <CartPopup />}
         <li className={styles.navbar__link}>
           {token ? (
             <button onClick={handleSignOut}>Signout</button>
