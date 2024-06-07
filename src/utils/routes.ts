@@ -15,7 +15,9 @@ const apiEndPoints = {
   addProductToCart: process.env.NEXT_PUBLIC_API+'/cart/add', // method: POST
   removeProductFromCart: (id: string) => process.env.NEXT_PUBLIC_API+`/cart/remove/${id}`, // method: DELETE
   clearCart: process.env.NEXT_PUBLIC_API+'/cart/clear', // method: DELETE
-  checkProductsForCheckout: process.env.NEXT_PUBLIC_API+'/cart/checkout', // method: GET
+  checkProductsForCheckout: process.env.NEXT_PUBLIC_API+'/cart/checkout', // method: POST
+  getCartItems: process.env.NEXT_PUBLIC_API+'/cart/items', // method: GET
+  saveCart: process.env.NEXT_PUBLIC_API+'/cart/save', // method: POST
 }
 
 export default apiEndPoints;

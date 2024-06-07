@@ -1,5 +1,6 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { CartState, ProductType } from '../../types';
+import { createSlice, PayloadAction, createAsyncThunk  } from '@reduxjs/toolkit';
+import { CartState, ProductType, ProductCart } from '../../types';
+import apiEndPoints from '@/utils/routes';
 
 const initialState: CartState = {
   items: [],
@@ -8,20 +9,38 @@ const initialState: CartState = {
   showCart: false,
 };
 
+export const addItemToCartDB = createAsyncThunk(
+  'cart/addItemToCartDB',
+  async (info: {item: ProductCart, token: string}) => {
+    const data = {
+      cartItem: info.item,
+    }
+    const response = await fetch( apiEndPoints.addProductToCart , {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Authorization': `Bearer ${info.token}`
+      },
+      body: JSON.stringify(data),
+    });
+    console.log('response', response)
+    return response.json();
+  }
+);
+
 const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
     addItem: (state, action: PayloadAction<ProductType>) => {
-      console.log('adding to cart from slice', action.payload);
+      let price, offer;
       if (action.payload._id) {
-        let price, offer;
         if (action.payload.offer) {
-          price = action.payload.price - (action.payload.price * action.payload.offer) / 100;
           offer = action.payload.offer;
+          price = action.payload.price - (action.payload.price * action.payload.offer) / 100;
         } else {
-          price = action.payload.price;
           offer = 0;
+          price = action.payload.price;
         }
         let item = state.items.find(item => item._id === action.payload._id);
         if (item) {
@@ -35,7 +54,7 @@ const cartSlice = createSlice({
           });
         }
         state.totalProducts = state.items.length;
-        state.totalPrices = state.totalPrices + (action.payload.price * action.payload.quantity);
+        state.totalPrices = state.totalPrices + (price * action.payload.quantity);
       }
     },
     removeItem: (state, action: PayloadAction<string>) => {

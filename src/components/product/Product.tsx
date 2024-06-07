@@ -3,13 +3,15 @@ import styles from './product.module.css';
 import { useState } from 'react';
 import { usePathname } from 'next/navigation'
 import { addItem} from '@/lib/features/cart/cartSlice';
-import { useAppDispatch } from '@/lib/hooks';
+import { useAppDispatch, useAppSelector } from '@/lib/hooks';
+import { addItemToCartDB } from '@/lib/features/cart/cartSlice';
 
 export default function Product(product: ProductType){
   const dispatch = useAppDispatch();
   const [currentImage, setCurrentImage] = useState(0);
   const pathname = usePathname();
   const [productQuantity, setProductQuantity] = useState(1);
+  const { token } = useAppSelector((state) => state.user);
   function handleAddToCart() {
     if(productQuantity == 0) return;
     if(productQuantity > product.quantity) {
@@ -19,6 +21,19 @@ export default function Product(product: ProductType){
     let productWithQuantity = {...product, quantity: productQuantity};
 
     dispatch(addItem(productWithQuantity));
+    if(pathname === '/products' && product._id && token) {
+      let newPrice = product.price;
+      if (product.offer) {
+        newPrice = product.price - product.price * product.offer / 100;
+      }
+      let item = {
+        _id: product._id,
+        quantity: productQuantity,
+        price: newPrice,
+        offer: product.offer,
+      }
+      dispatch(addItemToCartDB({item, token}));
+    }
     if(pathname === '/products') {
       alert('Product added to cart');
     }
@@ -49,7 +64,8 @@ export default function Product(product: ProductType){
       )}
       <p>{product.description}</p>
       {product.offer && <p>Offer: {product.offer}%</p>}
-      <p>Price: {product.offer ? (product.price - product.price * product.offer /100 ): product.price }</p>
+      <p>Price: {product.price}</p>
+      <p>Price with discount: {product.offer ? (product.price - product.price * product.offer /100 ): product.price }</p>
       <p>Quantity available: {product.quantity}</p>
 
       <span>Select the quantity to add</span>
