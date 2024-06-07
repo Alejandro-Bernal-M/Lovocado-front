@@ -1,15 +1,24 @@
 'use client'
 import { useAppDispatch } from "@/lib/hooks";
 import Link from "next/link";
-import { clearCart } from "@/lib/features/cart/cartSlice";
+import { clearCart, clearCartDB  } from "@/lib/features/cart/cartSlice";
 import { useAppSelector } from "@/lib/hooks";
 import apiEndPoints from "@/utils/routes";
 import Product from "@/components/product/Product";
 
 export default function CartPage(){
   const { items, totalProducts, totalPrices } = useAppSelector((state) => state.cart);
+  const { token } = useAppSelector((state) => state.user);
   const { products } = useAppSelector((state) => state.products);
   const dispatch = useAppDispatch();
+
+  function handleClearCart() {
+    if(token) {
+      dispatch(clearCartDB(token));
+    }
+    dispatch(clearCart());
+  }
+
   async function handleCheckout() {
     let productsToCheckout = items.map((item) => {
       return {
@@ -72,7 +81,7 @@ export default function CartPage(){
     <button onClick={handleCheckout} >
       Checkout
     </button>
-    <button onClick={() => dispatch(clearCart())}>Clean Cart</button>
+    <button onClick={ handleClearCart }>Clean Cart</button>
   </div>
   );
 }

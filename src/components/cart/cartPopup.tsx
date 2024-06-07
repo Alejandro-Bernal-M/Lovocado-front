@@ -2,14 +2,21 @@
 import { useAppDispatch } from "@/lib/hooks";
 import { useAppSelector } from "@/lib/hooks";
 import Link from "next/link";
-import { clearCart } from "@/lib/features/cart/cartSlice";
+import { clearCart, clearCartDB  } from "@/lib/features/cart/cartSlice";
 
 export default function CartPopup() {
 	const dispatch = useAppDispatch();
 	const { token } = useAppSelector((state) => state.user);
 	const { products } = useAppSelector((state) => state.products);
 	const { items, totalPrices, totalProducts } = useAppSelector((state) => state.cart);
-	console.log('items', items);
+
+  function handleClearCart() {
+    if(token) {
+      dispatch(clearCartDB(token));
+    }
+    dispatch(clearCart());
+  }
+
 	return (
 		<div>
 			<h1>Your Cart</h1>
@@ -30,7 +37,7 @@ export default function CartPopup() {
 					Inspect your cart
 				</Link>
 			</button>
-			<button onClick={() => dispatch(clearCart())}>Clean Cart</button>
+			<button onClick={ handleClearCart }>Clean Cart</button>
 		</div>
 	)
 }

@@ -23,7 +23,19 @@ export const addItemToCartDB = createAsyncThunk(
       },
       body: JSON.stringify(data),
     });
-    console.log('response', response)
+    return response.json();
+  }
+);
+
+export const clearCartDB = createAsyncThunk(
+  'cart/clearCartDB',
+  async (token: string) => {
+    const response = await fetch( apiEndPoints.clearCart , {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+    });
     return response.json();
   }
 );
