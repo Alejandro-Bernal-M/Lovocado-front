@@ -5,8 +5,9 @@ import { useAppSelector, useAppDispatch} from "../../lib/hooks";
 import { signOut, signIn } from '@/lib/features/user/userSlice';
 import { useEffect } from 'react';
 import { usePathname } from 'next/navigation'
-import { hideCart, displayCart } from '@/lib/features/cart/cartSlice';
+import { hideCart, displayCart, getCartItemsDB } from '@/lib/features/cart/cartSlice';
 import CartPopup from '../cart/cartPopup';
+import { getAllProducts } from '@/lib/features/products/productsSlice';
 
 export default function Navbar() {
   const {user} = useAppSelector((state) => state.user);
@@ -27,8 +28,10 @@ export default function Navbar() {
         const storageUser = window.localStorage.getItem('user');
         if (storageToken && storageUser) {
           dispatch(signIn({ token: storageToken, user: JSON.parse(storageUser) }));
+          dispatch(getCartItemsDB(storageToken));
         }
       }
+      dispatch(getAllProducts());
     }
   }, []);
 

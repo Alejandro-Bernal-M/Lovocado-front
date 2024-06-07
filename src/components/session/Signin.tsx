@@ -1,6 +1,7 @@
 import apiEndPoints from "@/utils/routes";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { signIn } from "@/lib/features/user/userSlice";
+import { getCartItemsDB } from "@/lib/features/cart/cartSlice";
 
 
 export default function Signin() {
@@ -32,6 +33,7 @@ export default function Signin() {
             dispatch(signIn(data))
             localStorage.setItem('token', data.token)
             localStorage.setItem('user', JSON.stringify(data.user))
+            dispatch(getCartItemsDB(data.token))
             return 
           }else if(res.status === 400){
             console.log('error')

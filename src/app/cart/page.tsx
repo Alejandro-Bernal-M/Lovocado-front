@@ -53,7 +53,6 @@ export default function CartPage(){
       alert('An error occurred, please try again later');
       console.error(error);
     }
-    console.log('productsToCheckout', productsToCheckout);
   }
 
   return (
@@ -63,12 +62,12 @@ export default function CartPage(){
     <p>Total Price: {totalPrices}</p>
     {items.length > 0 && items.map((item) => (
       <div key={item._id}>
-        { products.map((product) => {
+        { products.map((product, index) => {
           if(product._id === item._id){
             return(
               <> 
               <p>{item.quantity} x {product.name}</p>
-              <Product key={product._id + 1} {...product} />
+              <Product key={index} {...product} />
               <p>Unitary price: {item.price}</p>
               <p>Subtotal: {item.price * item.quantity}</p>
               </> 

@@ -40,6 +40,21 @@ export const clearCartDB = createAsyncThunk(
   }
 );
 
+export const getCartItemsDB = createAsyncThunk(
+  'cart/getCartItemsDB',
+  async (token: string) => {
+    const response = await fetch( apiEndPoints.getCartItems , {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+    });
+    let data = await response.json();
+    console.log('get cart items response', data)
+    return data;
+  }
+);
+
 const cartSlice = createSlice({
   name: 'cart',
   initialState,
@@ -88,6 +103,33 @@ const cartSlice = createSlice({
     hideCart: state => {
       state.showCart = false;
     }
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(addItemToCartDB.fulfilled, (state, action) => {
+        console.log('addItemToCartDB.fulfilled', action.payload);
+      })
+      .addCase(addItemToCartDB.rejected, (state, action) => {
+        console.log('addItemToCartDB.rejected', action.error);
+      })
+      .addCase(clearCartDB.fulfilled, (state, action) => {
+        console.log('clearCartDB.fulfilled', action.payload);
+      })
+      .addCase(clearCartDB.rejected, (state, action) => {
+        console.log('clearCartDB.rejected', action.error);
+      })
+      .addCase(getCartItemsDB.fulfilled, (state, action) => {
+        console.log('getCartItemsDB.fulfilled', action.payload);
+        state.items = action.payload.cartItems;
+        state.totalProducts = action.payload.cartItems.length;
+        state.totalPrices = action.payload.cartItems.reduce((acc: number, item: ProductCart) => {
+          return acc + (item.price * item.quantity);
+        }
+        , 0);
+      })
+      .addCase(getCartItemsDB.rejected, (state, action) => {
+        console.log('getCartItemsDB.rejected', action.error);
+      })
   }
 });
 
