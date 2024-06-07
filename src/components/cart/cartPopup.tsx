@@ -27,7 +27,7 @@ export default function CartPopup() {
 			</Link> */}
 			<button>
 				<Link href="/cart">
-					Check your cart
+					Inspect your cart
 				</Link>
 			</button>
 			<button onClick={() => dispatch(clearCart())}>Clean Cart</button>
