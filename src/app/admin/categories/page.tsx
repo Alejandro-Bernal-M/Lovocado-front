@@ -8,7 +8,6 @@ export default function AdminProducts() {
   const {categories, loading, error} = useAppSelector((state) => state.categories);
   const [displayCategoryPopup, setDisplayCategoryPopup] = useState(false);
 
-  console.log('categories',categories);
 
   return (
     <div>

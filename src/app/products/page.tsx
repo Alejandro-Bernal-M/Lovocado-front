@@ -39,7 +39,6 @@ export default function Products() {
       firstCategoryButton.click();
     }
   }, []);
-  console.log('products', products)
 
   return (
     <div>
