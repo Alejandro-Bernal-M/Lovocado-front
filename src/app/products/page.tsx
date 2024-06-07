@@ -15,13 +15,20 @@ export default function Products() {
   const [selectedProducts, setSelectedProducts] = useState<ProductType[]>([]);
   const [ loadingProducts, setLoadingProducts ] = useState(false);
   const [categoryTittle, setCategoryTittle] = useState('' as string);
+  const [ productsProccessed, setProductsProccessed ] = useState(false);
 
-  const handleSelect = (id: any, name: string) => {
+  const handleSelect = (id: any, name: string, all: boolean) => {
     setLoadingProducts(true);
-    let filteredProducts = products.filter((product) => product.category._id === id);
-    setSelectedProducts(filteredProducts);
-    setCategoryTittle(name);
+    if (all) {
+      setSelectedProducts(products);
+      setCategoryTittle('All our');
+    }else {
+      let filteredProducts = products.filter((product) => product.category._id === id);
+      setSelectedProducts(filteredProducts);
+      setCategoryTittle(name);
+    }
     setLoadingProducts(false);
+    setProductsProccessed(true);
   }
 
   useEffect(() => {
@@ -39,8 +46,9 @@ export default function Products() {
       <h1> Our products</h1>
       { categories.length > 0 && (
         <ul className={styles.cat_ul}>
+          <li className="cat_li" onClick={() => {handleSelect(0, '', true)}} >All products</li>
           {categories.map((category) => (
-            <li className="cat_li" key={category._id} onClick={() => {handleSelect(category._id, category.name)}}>{category.name}</li>
+            <li className="cat_li" key={category._id} onClick={() => {handleSelect(category._id, category.name, false)}}>{category.name}</li>
           ))}
         </ul>
       )}
@@ -52,7 +60,7 @@ export default function Products() {
           <Product key={product._id} {...product} />
         ))
         :
-        ((products.length > 0 && !loadingProducts) && products.map((product) => (
+        ((products.length > 0 && !loadingProducts && !productsProccessed ) && products.map((product) => (
           <Product key={product._id} {...product} />
         )))
       }
