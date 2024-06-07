@@ -44,13 +44,18 @@ export default function Products() {
           ))}
         </ul>
       )}
-      <h2>{categoryTittle} products</h2>
+      <h2>{categoryTittle != '' ? categoryTittle : "All our" } products</h2>
       {loadingProducts && <p>Loading...</p>}
       {error && <p> We had an error loading our products, please try again</p>}
       <div className={styles.products}>
-        {selectedProducts.length > 0 && selectedProducts.map((product) => (
+        {selectedProducts.length > 0 ? selectedProducts.map((product) => (
           <Product key={product._id} {...product} />
-        ))}
+        ))
+        :
+        ((products.length > 0 && !loadingProducts) && products.map((product) => (
+          <Product key={product._id} {...product} />
+        )))
+      }
       </div>
       {selectedProducts.length === 0 && !loadingProducts && <p>No products found</p>}
     </div>
