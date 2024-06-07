@@ -5,12 +5,15 @@ import { clearCart, clearCartDB  } from "@/lib/features/cart/cartSlice";
 import { useAppSelector } from "@/lib/hooks";
 import apiEndPoints from "@/utils/routes";
 import Product from "@/components/product/Product";
+import { removeItemQuantity } from "@/lib/features/cart/cartSlice";
+import { useState } from "react";
 
 export default function CartPage(){
   const { items, totalProducts, totalPrices } = useAppSelector((state) => state.cart);
   const { token } = useAppSelector((state) => state.user);
   const { products } = useAppSelector((state) => state.products);
   const dispatch = useAppDispatch();
+  const [productQuantity, setProductQuantity] = useState(0);
 
   function handleClearCart() {
     if(token) {
@@ -55,6 +58,14 @@ export default function CartPage(){
     }
   }
 
+  function handleRemoveFromCart(_id: string) {
+    if(productQuantity == 0) return;
+    let value = document.getElementById(_id + '-remove-value') as HTMLInputElement;
+    if(_id){
+      dispatch(removeItemQuantity({_id: _id, quantity: parseInt(value.value)}));
+    }
+  }
+
   return (
     <div>
     <h1>Your Cart</h1>
@@ -68,6 +79,13 @@ export default function CartPage(){
               <> 
               <p>{item.quantity} x {product.name}</p>
               <Product key={index} {...product} />
+              { item.quantity > 0 && (
+                <>
+                  <span>Select the quantity to remove</span>
+                  <input type="number" id={item._id + '-remove-value'} max={item.quantity} defaultValue={item.quantity} />
+                  <button onClick={ () => handleRemoveFromCart(item._id) }>Remove products</button>
+                </>
+              ) }
               <p>Unitary price: {item.price}</p>
               <p>Subtotal: {item.price * item.quantity}</p>
               </> 

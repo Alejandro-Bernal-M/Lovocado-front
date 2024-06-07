@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, createAsyncThunk  } from '@reduxjs/toolkit';
-import { CartState, ProductType, ProductCart } from '../../types';
+import { CartState, ProductType, ProductCart, RemoveItem } from '../../types';
 import apiEndPoints from '@/utils/routes';
 
 const initialState: CartState = {
@@ -84,6 +84,14 @@ const cartSlice = createSlice({
         state.totalPrices = state.totalPrices + (price * action.payload.quantity);
       }
     },
+    removeItemQuantity: (state, action:PayloadAction<RemoveItem>) => {
+      let item = state.items.find(item => item._id === action.payload._id);
+      if (item) {
+        item.quantity = item.quantity - action.payload.quantity;
+        state.totalProducts = state.totalProducts - action.payload.quantity;
+        state.totalPrices = state.totalPrices - (item.price * action.payload.quantity);
+      }
+    },
     removeItem: (state, action: PayloadAction<string>) => {
       let item = state.items.find(item => item._id === action.payload);
       if (item) {
@@ -133,6 +141,6 @@ const cartSlice = createSlice({
   }
 });
 
-export const { addItem, removeItem, clearCart, displayCart, hideCart } = cartSlice.actions;
+export const { addItem, removeItem, clearCart, displayCart, hideCart, removeItemQuantity } = cartSlice.actions;
 
 export default cartSlice.reducer;

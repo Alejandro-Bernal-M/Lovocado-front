@@ -2,7 +2,7 @@ import type { ProductType } from '@/lib/types';
 import styles from './product.module.css';
 import { useState } from 'react';
 import { usePathname } from 'next/navigation'
-import { addItem} from '@/lib/features/cart/cartSlice';
+import { addItem } from '@/lib/features/cart/cartSlice';
 import { useAppDispatch, useAppSelector } from '@/lib/hooks';
 import { addItemToCartDB } from '@/lib/features/cart/cartSlice';
 
@@ -41,6 +41,7 @@ export default function Product(product: ProductType){
     setProductQuantity(1);
 
   }
+
   return(
     <div>
       <h2>{product.name}</h2>
@@ -69,8 +70,8 @@ export default function Product(product: ProductType){
       <p>Quantity available: {product.quantity}</p>
 
       <span>Select the quantity to add</span>
-      <input type="number" max={product.quantity} value={productQuantity} onChange={(e) => setProductQuantity(parseInt(e.target.value))} />
-      <button onClick={() => {handleAddToCart()}}>Add to Cart</button>
+      <input type="number" min={1} max={product.quantity} value={productQuantity} onChange={(e) => setProductQuantity(parseInt(e.target.value))} />
+      <button onClick={() => {handleAddToCart()}}>Add products</button>
 
     </div>
   )

@@ -33,4 +33,9 @@ interface CartState {
   showCart: boolean,
 }
 
-export type { Product as ProductType, Category, CartState, ProductCart };
+interface RemoveItem {
+  _id: string;
+  quantity: number;
+}
+
+export type { Product as ProductType, Category, CartState, ProductCart, RemoveItem };
