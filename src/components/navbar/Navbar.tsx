@@ -13,7 +13,7 @@ export default function Navbar() {
   const {token} = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const pathName = usePathname();
-  const allowedRoutes = ['/session', '/', '/products', '/cart'];
+  const allowedRoutes = ['/session', '/', '/products', '/cart', '/checkout'];
   const { showCart } = useAppSelector((state) => state.cart);
 
   const handleSignOut = () => {
