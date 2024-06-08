@@ -1,7 +1,7 @@
 'use client'
 import { useAppDispatch } from "@/lib/hooks";
 import Link from "next/link";
-import { clearCart, clearCartDB  } from "@/lib/features/cart/cartSlice";
+import { clearCart, clearCartDB, subtractQuantityFromCartDB  } from "@/lib/features/cart/cartSlice";
 import { useAppSelector } from "@/lib/hooks";
 import apiEndPoints from "@/utils/routes";
 import Product from "@/components/product/Product";
@@ -59,10 +59,18 @@ export default function CartPage(){
   }
 
   function handleRemoveFromCart(_id: string) {
-    if(productQuantity == 0) return;
     let value = document.getElementById(_id + '-remove-value') as HTMLInputElement;
+    let quantity = parseInt(value.value);
+    if(quantity === 0) return;
     if(_id){
-      dispatch(removeItemQuantity({_id: _id, quantity: parseInt(value.value)}));
+      dispatch(removeItemQuantity({_id: _id, quantity: quantity}));
+      if(token){
+        let info = {
+          _id: _id,
+          quantity: quantity,
+        }
+        dispatch(subtractQuantityFromCartDB({item: info, token: token}));
+      }
     }
   }
 
