@@ -88,6 +88,26 @@ export const subtractQuantityFromCartDB = createAsyncThunk(
   }
 );
 
+export const removeItemFromCartDB = createAsyncThunk(
+  'cart/removeItemFromCart',
+  async (info: {productId: string, token: string},{ dispatch }) => {
+    const response = await fetch( apiEndPoints.removeProductFromCart(info.productId), {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Authorization': `Bearer ${info.token}`
+      }
+    });
+    if(response.status === 400 || response.status === 401) {
+      console.log('expired')
+      dispatch(signOut());
+      window.location.href = '/session ';
+      alert('Session expired, please sign in');
+    }
+    return response.json();
+  }
+);
+
 const cartSlice = createSlice({
   name: 'cart',
   initialState,
@@ -195,6 +215,23 @@ const cartSlice = createSlice({
           , 0);
         }
       })
+      .addCase(subtractQuantityFromCartDB.rejected, (state, action) => {
+        console.log('subtractQuantityFromCartDB.rejected', action.error);
+      })
+      .addCase(removeItemFromCartDB.fulfilled, (state, action) => {
+        console.log('removeItemFromCartDB.fulfilled', action.payload);
+        if(action.payload.cartItems) {
+          state.items = action.payload.cartItems;
+          state.totalProducts = action.payload.cartItems.length;
+          state.totalPrices = action.payload.cartItems.reduce((acc: number, item: ProductCart) => {
+            return acc + (item.price * item.quantity);
+          }
+          , 0);
+        }
+      })
+      .addCase(removeItemFromCartDB.rejected, (state, action) => {
+        console.log('removeItemFromCartDB.rejected', action.error);
+      });
   }
 });
 

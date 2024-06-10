@@ -2,11 +2,13 @@ import apiEndPoints from "@/utils/routes";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { signIn } from "@/lib/features/user/userSlice";
 import { getCartItemsDB } from "@/lib/features/cart/cartSlice";
+import { useRouter} from 'next/navigation'
 
 
 export default function Signin() {
   const {user} = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
+  const router = useRouter();
 
   function handleSignin(e: any) {
     e.preventDefault();
@@ -34,6 +36,7 @@ export default function Signin() {
             localStorage.setItem('token', data.token)
             localStorage.setItem('user', JSON.stringify(data.user))
             dispatch(getCartItemsDB(data.token))
+            router.push('/products')
             return 
           }else if(res.status === 400){
             console.log('error')

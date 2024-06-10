@@ -1,12 +1,13 @@
 'use client'
 import { useAppDispatch } from "@/lib/hooks";
 import Link from "next/link";
-import { clearCart, clearCartDB, subtractQuantityFromCartDB  } from "@/lib/features/cart/cartSlice";
+import { clearCart, clearCartDB, subtractQuantityFromCartDB, removeItemFromCartDB, removeItem  } from "@/lib/features/cart/cartSlice";
 import { useAppSelector } from "@/lib/hooks";
 import apiEndPoints from "@/utils/routes";
 import Product from "@/components/product/Product";
 import { removeItemQuantity } from "@/lib/features/cart/cartSlice";
 import { useState } from "react";
+import { ProductType} from "@/lib/types";
 
 export default function CartPage(){
   const { items, totalProducts, totalPrices } = useAppSelector((state) => state.cart);
@@ -74,6 +75,15 @@ export default function CartPage(){
     }
   }
 
+  function handleRemoveItemFromCart(_id: string) {
+    if(_id){
+      dispatch(removeItem(_id));
+      if(token){
+        dispatch(removeItemFromCartDB({productId: _id, token: token}));
+      }
+    }
+  }
+
   return (
     <div>
     <h1>Your Cart</h1>
@@ -81,11 +91,10 @@ export default function CartPage(){
     <p>Total Price: {totalPrices}</p>
     {items.length > 0 && items.map((item) => (
       <div key={item._id}>
-        { products.map((product, index) => {
+        { products.map((product:ProductType, index) => {
           if(product._id === item._id){
             return(
               <> 
-              <p>{item.quantity} x {product.name}</p>
               <Product key={index} {...product} />
               { item.quantity > 0 && (
                 <>
@@ -94,8 +103,10 @@ export default function CartPage(){
                   <button onClick={ () => handleRemoveFromCart(item._id) }>Remove products</button>
                 </>
               ) }
+              <p>{item.quantity} x {product.name}</p>
               <p>Unitary price: {item.price}</p>
               <p>Subtotal: {item.price * item.quantity}</p>
+              <button onClick={ () => handleRemoveItemFromCart(item._id) }>Remove this product</button>
               </> 
             )
           }}
