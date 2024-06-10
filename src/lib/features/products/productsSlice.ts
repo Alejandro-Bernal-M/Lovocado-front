@@ -56,15 +56,28 @@ const createProduct  = createAsyncThunk(
 
 const updateProduct = createAsyncThunk(
   "products/updateProduct",
-  async (product) => {
+  async (data : any, { dispatch }) => {
+    const product = data.product;
+    const token = data.token;
     try {
-      const response = await fetch(apiEndPoints.updateProduct, {
+      const response = await fetch(apiEndPoints.updateProduct(product._id), {
         method: "PUT",
         headers: {
-          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
         },
-        body: JSON.stringify(product),
+        body: product,
       });
+      if(response.status === 400 || response.status === 401) {
+        dispatch(signOut());
+        window.location.href = '/session ';
+        alert('Session expired, please sign in');
+        return
+      }
+
+      if( response.status === 404) {
+        alert('Product not found')
+        return
+      }
       return response.json();
     } catch (error) {
       console.log(error);
@@ -130,7 +143,16 @@ const productsSlice = createSlice({
     });
     builder.addCase(updateProduct.fulfilled, (state, action) => {
       state.loading = false;
-      state.products = action.payload;
+      if(action.payload.product == null) {
+        return;
+      }
+      state.products = state.products.map((product) => {
+        if (product._id === action.payload.product._id) {
+          return action.payload.product;
+        }
+        return product;
+      }
+      );
     });
     builder.addCase(updateProduct.rejected, (state, action) => {
       state.loading = false;

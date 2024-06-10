@@ -51,7 +51,7 @@ export default function Product(product: ProductType){
           <p>Created by: {product.createdBy?.firstName}</p>
         </>
       )}
-      {product.productImages && (
+      {product.productImages && product.productImages?.length > 0 && (
         <>
           {product.productImages.length > 1 && currentImage > 0 && (
             <button onClick={() => {setCurrentImage(currentImage - 1)}} >Previous Image</button>
