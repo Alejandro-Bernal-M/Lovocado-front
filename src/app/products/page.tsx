@@ -64,7 +64,7 @@ export default function Products() {
         )))
       }
       </div>
-      {selectedProducts.length === 0 && !loadingProducts && <p>No products found</p>}
+      {selectedProducts.length === 0 && !loadingProducts && productsProccessed &&<p>No products found</p>}
     </div>
   );
 }
