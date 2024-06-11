@@ -5,7 +5,7 @@ interface Product {
   quantity: number;
   category: {name: string, _id: string};
   offer?: number;
-  productImages?: [{img: string, id: string}];
+  productImages?: {img: string, _id: string}[];
   createdAt?: string;
   createdBy?: {firstName: string, lastName: string, _id: string, fullName: string};
   _id?: string;

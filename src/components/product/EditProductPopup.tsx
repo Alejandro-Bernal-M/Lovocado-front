@@ -1,15 +1,19 @@
 import { ProductType, Category } from "@/lib/types"
-import { useAppDispatch} from "@/lib/hooks"
+import { useAppDispatch } from "@/lib/hooks"
 import { updateProduct } from "@/lib/features/products/productsSlice";
+import { useState } from "react";
 import styles from "./editProductPopup.module.css"
 
-
-export default function EditProductPopup({productForEdit, categories, editPopUp, setEditPopup}: {productForEdit: ProductType, categories: Category[] | null, editPopUp: boolean, setEditPopup: (value: boolean) => void
+export default function EditProductPopup({productForEdit, categories, setEditPopup}: {productForEdit: ProductType, categories: Category[] | null, setEditPopup: (value: boolean) => void
 })  {
+	const [imagesToDeleteIds, setImagesToDeleteIds] = useState<string[]>([]);
+	const [imagesToDelete, setImagesToDelete] = useState<{img:string}[]>([]);
 	const dispatch = useAppDispatch();
 	function handleProductEdit(e: any) {
 		e.preventDefault();
 		const formData = new FormData(e.target);
+		formData.append('imagesToDeleteIds', JSON.stringify(imagesToDeleteIds));
+		formData.append('imagesToDelete', JSON.stringify(imagesToDelete));
 		const data = {
 			product: formData,
 			token: localStorage.getItem('token'),
@@ -20,7 +24,20 @@ export default function EditProductPopup({productForEdit, categories, editPopUp,
 			console.error(error);
 		}
 		setEditPopup(false);
+		setImagesToDelete([]);
 	}
+
+	const handleImageDeletion = (imageId: string, img:string )=> {
+		console.log('deleting')
+		setImagesToDeleteIds([...imagesToDeleteIds, imageId]);
+		setImagesToDelete([...imagesToDelete, {img: img}]);
+	}
+
+	const handleCancelImageDeletion = (imageId: string, img:string) => {
+		setImagesToDeleteIds(imagesToDeleteIds.filter((id) => id !== imageId));
+		setImagesToDelete(imagesToDelete.filter((image) => image.img !== img));
+	}
+
 	return (
 		<div>
 			<form encType="multipart/form-data" onSubmit={handleProductEdit}>
@@ -40,14 +57,20 @@ export default function EditProductPopup({productForEdit, categories, editPopUp,
 						<p>Images</p>
 						{productForEdit.productImages.map((image, index) => (
 							<div key={`${index}-image-edit `}>
-								<img src={`${process.env.NEXT_PUBLIC_IMAGES}/${image.img}`} alt={productForEdit.name} className={styles.product_image} />
-								<button>Delete</button>
+								<img src={`${process.env.NEXT_PUBLIC_IMAGES}${image.img}`} alt={productForEdit.name} className={styles.product_image} />
+								<span onClick={() => handleImageDeletion(image._id, image.img)} >Delete Image</span>
+								{imagesToDeleteIds.includes(image._id) && (
+									<>
+									<p>Image will be deleted</p>
+									<span onClick={() => handleCancelImageDeletion(image._id, image.img)}> Cancel deletion</span>
+									</>
+								)}
 							</div>
 						))}
 					</div>
 				)}
 				<label htmlFor="newImage">New Images</label>
-				<input type="file" id="newImage" name="productImages" multiple />
+				<input type="file" id="newImage" name="productImages" multiple/>
 				<label htmlFor="category">Category</label>
 				{categories && categories.length > 0 && (
 					<select name="category" id="category">
@@ -57,6 +80,7 @@ export default function EditProductPopup({productForEdit, categories, editPopUp,
 					</select>
 				)}
 				<button type="submit">Edit</button>
+				<button type="button" onClick={() => setEditPopup(false)}>Cancel</button>
 			</form>
 		</div>
 	)

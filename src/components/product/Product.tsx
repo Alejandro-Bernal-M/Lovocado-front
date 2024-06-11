@@ -56,7 +56,7 @@ export default function Product(product: ProductType){
           {product.productImages.length > 1 && currentImage > 0 && (
             <button onClick={() => {setCurrentImage(currentImage - 1)}} >Previous Image</button>
           )}
-          <img src={`${process.env.NEXT_PUBLIC_IMAGES}/${product.productImages[currentImage].img}`} alt={product.name} className={styles.product_image}/>
+          <img src={`${process.env.NEXT_PUBLIC_IMAGES}${product.productImages[currentImage].img}`} alt={product.name} className={styles.product_image}/>
           {product.productImages.length > 1 && currentImage +1 < product.productImages.length && (
             <button onClick={() => {setCurrentImage(currentImage + 1)}} >Next Image</button>
           )

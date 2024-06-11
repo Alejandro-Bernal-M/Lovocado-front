@@ -16,12 +16,18 @@ export default function AdminProducts() {
   const [ editPopup, setEditPopup ] = useState(false);
 
   function handleEdit(product: ProductType) {
-    setProductForEdit(product);
-    categories.length > 0 ? setCategoriesForEdit(categories) : setCategoriesForEdit([]);
-    setEditPopup(true);
+    if (product) {
+      setProductForEdit(product);
+      if (categories.length > 0) {
+        setCategoriesForEdit(categories);
+      } else {
+        setCategoriesForEdit([]);
+      }
+      setEditPopup(true);
+    } else {
+      console.error('Invalid product:', product);
+    }
   }
-
-  console.log('products', products)
 
   return (
     <div>
@@ -34,13 +40,13 @@ export default function AdminProducts() {
         <p>Number of products: {products ? products.length : 0}</p>
       </div>
       {products.length === 0 && !loading && <p>No products found</p>}
-      {products.length > 0 && products.map((product) => (
+      {products.length > 0 && products.map((product, index) => (
         <>
-        <Product key={product._id} {...product} />
+        <Product key={`${product._id}-${index}`} {...product} />
         <button onClick={() => {handleEdit(product)} } >Edit</button>
         </>
       ))}
-      {editPopup && <EditProductPopup productForEdit= {productForEdit} categories={categoriesForEdit} editPopUp={editPopup} setEditPopup={setEditPopup} />}
+      {editPopup && <EditProductPopup productForEdit= {productForEdit} categories={categoriesForEdit} setEditPopup={setEditPopup} />}
     </div>
   );
 }

@@ -31,7 +31,6 @@ const createProduct  = createAsyncThunk(
     const product = data.product;
     const token = data.token;
     try {
-      console.log('product client', product);
       const response: any = await fetch(apiEndPoints.createProduct, {
         method: "POST",
         headers: {
@@ -45,7 +44,6 @@ const createProduct  = createAsyncThunk(
         window.location.href = '/';
         return 
       }
-      console.log('response', response)
       dispatch(getAllProducts());
       return response.json();
     } catch (error) {
@@ -108,7 +106,6 @@ const productsSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(getAllProducts.fulfilled, (state, action) => {
-      console.log('action.payload', action.payload)
       state.loading = false;
       state.products = action.payload.products;
     });
