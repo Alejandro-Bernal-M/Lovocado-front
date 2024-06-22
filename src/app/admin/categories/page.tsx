@@ -1,12 +1,13 @@
 'use client'
 import { useState } from 'react';
-import { useAppSelector } from '@/lib/hooks';
+import { useAppSelector, useAppDispatch } from '@/lib/hooks';
 import CreateCategoryPopup from '@/components/createCategoryPopup/CreateCategoryPopup';
 import EditCategoryPopup from '@/components/EditCategoryPopup/EditCategoryPopup';
 import { Category } from '@/lib/types';
+import { deleteCategory } from '@/lib/features/categories/categoriesSlice';
 
 export default function AdminProducts() {
-
+  const dispatch = useAppDispatch();
   const {categories, loading, error} = useAppSelector((state) => state.categories);
   const [displayCategoryPopup, setDisplayCategoryPopup] = useState(false);
   const [categoryForEdit, setCategoryForEdit] = useState({} as Category);
@@ -25,7 +26,18 @@ export default function AdminProducts() {
     }
   }
 
-  console.log(categories);
+  function handleDelete(category: Category) {
+    const data = {
+      _id: category._id,
+      token: localStorage.getItem('token'),
+    };
+    try {
+      dispatch(deleteCategory(data));
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
 
   return (
     <div>
@@ -36,12 +48,28 @@ export default function AdminProducts() {
       {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
       {categories && categories.length > 0 && categories.map((category) => (
-        <div key={category._id}>
-          <h2>{category.name}</h2>
-          <img src={`${process.env.NEXT_PUBLIC_IMAGES}${category.categoryImage}` } alt={category.name} height={50} width={50}/>
-          <button onClick={() => {handleEdit(category)}}>Edit</button>
-        </div>
-      ))}
+        <>
+          <div key={category._id}>
+            <h2>{category.name}</h2>
+            {category.parentId && <p>parent: {categories.find(cat => cat._id == category.parentId)?.name}</p>}
+            <img src={`${process.env.NEXT_PUBLIC_IMAGES}${category.categoryImage}` } alt={category.name} height={50} width={50}/>
+            <button onClick={() => {handleEdit(category)}}>Edit</button>
+            <button onClick={() => {handleDelete(category)}}>Delete</button>
+          </div>
+          {category.children && category.children.length > 0 && 
+            <p>Children categories</p> }
+          {category.children && category.children.length > 0 && category.children.map((child) => (
+            <div key={child._id + 'child'}>
+              <h3>{child.name}</h3>
+              <p>parent: {category.name}</p>
+              <img src={`${process.env.NEXT_PUBLIC_IMAGES}${child.categoryImage}` } alt={child.name} height={50} width={50}/>
+              <button onClick={() => {handleEdit(child)}}>Edit</button>
+              <button onClick={() => {handleDelete(child)}}>Delete</button>
+            </div>
+          ))}
+        </>
+        ))
+      }
     </div>
   );
 }

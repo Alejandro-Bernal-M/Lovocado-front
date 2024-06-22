@@ -34,7 +34,7 @@ export default function EditCategoryPopup({categories, category, setEditPopup}: 
         />
         <input type="file" accept="image/*" name='categoryImage' />
         <label htmlFor="parent">Parent Category</label>
-        <select id="parent" name="parentId" defaultValue={category._id}>
+        <select id="parent" name="parentId" defaultValue={category.parentId}>
           <option value="">None</option>
           { categories && categories.map((cat) => (
               (cat._id !== category._id) &&

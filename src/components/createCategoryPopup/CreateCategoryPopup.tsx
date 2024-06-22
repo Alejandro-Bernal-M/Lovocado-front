@@ -11,6 +11,7 @@ export default function CreateCategoryPopup() {
     e.preventDefault();
     let formData = new FormData(e.currentTarget);
     dispatch(createCategory({category:formData, token}));
+    e.currentTarget.reset();
   };
 
   return (

@@ -78,20 +78,26 @@ const updateCategory = createAsyncThunk(
 const deleteCategory = createAsyncThunk(
   "categories/deleteCategory",
   async (data: any, { dispatch }) => {
-    const category = data.category;
+    const categoryId = data._id;
     const token = data.token;
     try {
-      const response: any = await fetch(apiEndPoints.deleteCategory(category._id), {
+      const response: any = await fetch(apiEndPoints.deleteCategory(categoryId), {
         method: "DELETE",
         headers: {
-          "Authorization": `Bearer ${token}`
-        },
+          "Authorization": `Bearer ${token}`,
+        }
       });
       if (response.status == 400) {
-        console.log('Please sign in to delete a category')
-        //dispatch(signOut());
+        alert('Error deleting category');
         return
       }
+
+      if (response.status == 401) {
+        dispatch(signOut());
+        window.location.href = '/';
+        return
+      }
+
       return response.json();
     } catch (error) {
       console.log(error);
@@ -135,8 +141,22 @@ const categoriesSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(updateCategory.fulfilled, (state, action) => {
-      console.log('action.payload', action.payload)
       state.loading = false;
+      console.log('updateCategory.fulfilled', action.payload.updatedCategory)
+      if(action.payload.updatedCategory.parentId) {
+        const parentIndex = state.categories.findIndex((category) => category._id == action.payload.updatedCategory.parentId);
+        const childIndex = state.categories[parentIndex].children.findIndex((child) => child._id == action.payload.updatedCategory._id);
+        if(childIndex === -1){
+          state.categories[parentIndex].children.push(action.payload.updatedCategory);
+        }
+        state.categories.forEach((category) => {
+          if(category._id !== action.payload.updatedCategory.parentId) {
+            category.children = category.children.filter((child) => child._id !== action.payload.updatedCategory._id);
+          }
+        });
+        state.categories[parentIndex].children[childIndex] = action.payload.updatedCategory;
+        return;
+      }
       const index = state.categories.findIndex((category) => category._id == action.payload.updatedCategory._id);
       state.categories[index] = action.payload.updatedCategory;
     });
@@ -149,7 +169,7 @@ const categoriesSlice = createSlice({
     });
     builder.addCase(deleteCategory.fulfilled, (state, action) => {
       state.loading = false;
-      state.categories = state.categories.filter((category) => category._id !== action.payload._id);
+      state.categories = action.payload.updatedCategories;
     });
     builder.addCase(deleteCategory.rejected, (state, action) => {
       state.loading = false;
