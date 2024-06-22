@@ -48,17 +48,24 @@ const updateCategory = createAsyncThunk(
   async (data: any, { dispatch }) => {
     const category = data.category;
     const token = data.token;
+    console.log('category', category)
     try {
-      const response: any = await fetch(apiEndPoints.updateCategory(category._id), {
+      const response: any = await fetch(apiEndPoints.updateCategory(category.get('_id')), {
         method: "PUT",
         headers: {
           "Authorization": `Bearer ${token}`
         },
-        body: JSON.stringify(category),
+        body: category,
       });
-      if (response.status == 400) {
-        console.log('Please sign in to update a category')
-        //dispatch(signOut());
+      if (response.status === 401) {
+        dispatch(signOut());
+        window.location.href = '/session ';
+        alert('Session expired, please sign in');
+        return
+      }
+
+      if (response.status === 400) {
+        alert('Error updating category');
         return
       }
       return response.json();
@@ -105,6 +112,7 @@ const categoriesSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(getCategories.fulfilled, (state, action) => {
+      console.log('getCategories.fulfilled', action.payload.categoryList)
       state.loading = false;
       state.categories = action.payload.categoryList;
     });
@@ -127,9 +135,10 @@ const categoriesSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(updateCategory.fulfilled, (state, action) => {
+      console.log('action.payload', action.payload)
       state.loading = false;
-      const index = state.categories.findIndex((category) => category._id == action.payload._id);
-      state.categories[index] = action.payload;
+      const index = state.categories.findIndex((category) => category._id == action.payload.updatedCategory._id);
+      state.categories[index] = action.payload.updatedCategory;
     });
     builder.addCase(updateCategory.rejected, (state, action) => {
       state.loading = false;
