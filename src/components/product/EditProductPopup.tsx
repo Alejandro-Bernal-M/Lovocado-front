@@ -75,7 +75,13 @@ export default function EditProductPopup({productForEdit, categories, setEditPop
 				{categories && categories.length > 0 && (
 					<select name="category" id="category" defaultValue={productForEdit.category._id}>
 						{categories.map((category) => (
-							<option key={category._id} value={category._id} >{category.name}</option>
+							<>
+							<option key={category._id + 'createpopup'} value={category._id} >{category.name}</option>
+							{category.children && category.children.length > 0 && category.children.map((child) => (
+								<option key={child._id + 'child-create-popup'} value={child._id} >{child.name}</option>
+							))
+							}
+							</>
 						))}
 					</select>
 				)}

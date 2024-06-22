@@ -118,7 +118,6 @@ const categoriesSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(getCategories.fulfilled, (state, action) => {
-      console.log('getCategories.fulfilled', action.payload.categoryList)
       state.loading = false;
       state.categories = action.payload.categoryList;
     });
@@ -142,7 +141,6 @@ const categoriesSlice = createSlice({
     });
     builder.addCase(updateCategory.fulfilled, (state, action) => {
       state.loading = false;
-      console.log('updateCategory.fulfilled', action.payload.updatedCategory)
       if(action.payload.updatedCategory.parentId) {
         const parentIndex = state.categories.findIndex((category) => category._id == action.payload.updatedCategory.parentId);
         const childIndex = state.categories[parentIndex].children.findIndex((child) => child._id == action.payload.updatedCategory._id);

@@ -47,7 +47,17 @@ export default function Products() {
         <ul className={styles.cat_ul}>
           <li className="cat_li" onClick={() => {handleSelect(0, '', true)}} >All products</li>
           {categories.map((category) => (
+            <>
             <li className="cat_li" key={category._id} onClick={() => {handleSelect(category._id, category.name, false)}}>{category.name}</li>
+            {category.children && category.children.length > 0 && (
+              <ul>
+                {category.children.map((child) => (
+                  <li key={child._id} onClick={() => {handleSelect(child._id, child.name, false)}}>{child.name}</li>
+                ))}
+              </ul>
+            )
+            }
+            </>
           ))}
         </ul>
       )}

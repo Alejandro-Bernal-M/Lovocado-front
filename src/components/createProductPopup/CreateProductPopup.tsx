@@ -51,9 +51,17 @@ export default function CreateProductPopup() {
         <select id="category" name="category" required>
           <option value="">Select Category</option>
           {categories && categories.length > 0 && categories.map((category) => (
+            <>
             <option key={category._id} value={category._id}>
               {category.name}
             </option>
+            {category.children && category.children.length > 0 && category.children.map((child) => (
+              <option key={child._id + 'child'} value={child._id}>
+                children category {child.name}
+              </option>
+            ))
+            }
+            </>
           ))}
         </select>
 
