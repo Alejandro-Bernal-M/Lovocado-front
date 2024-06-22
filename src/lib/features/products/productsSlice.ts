@@ -90,11 +90,32 @@ const updateProduct = createAsyncThunk(
 
 const deleteProduct = createAsyncThunk(
   "products/deleteProduct",
-  async (id: string) => {
+  async (data: any, { dispatch }) => {
+    const id = data._id;
+    const token = data.token;
     try {
-      const response = await fetch(`${apiEndPoints.deleteProduct}/${id}`, {
+      const response = await fetch(apiEndPoints.deleteProduct(id), {
         method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        },
       });
+      if(response.status === 401) {
+        dispatch(signOut());
+        window.location.href = '/session ';
+        alert('Session expired, please sign in');
+        return
+      }
+
+      if(response.status === 400) {
+        alert('Error deleting product');
+        return
+      }
+
+      if( response.status === 404) {
+        alert('Product not found')
+        return
+      }
       return response.json();
     } catch (error) {
       console.log(error);
@@ -168,7 +189,7 @@ const productsSlice = createSlice({
     });
     builder.addCase(deleteProduct.fulfilled, (state, action) => {
       state.loading = false;
-      state.products = action.payload;
+      state.products = state.products.filter((product) => product._id !== action.payload.product._id);
     });
     builder.addCase(deleteProduct.rejected, (state, action) => {
       state.loading = false;

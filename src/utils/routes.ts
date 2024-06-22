@@ -6,7 +6,7 @@ const apiEndPoints = {
   getProduct: process.env.NEXT_PUBLIC_API+'/product', // method: GET
   createProduct: process.env.NEXT_PUBLIC_API+'/products', // method: POST
   updateProduct: (id: string) => process.env.NEXT_PUBLIC_API+`/product/${id}`, // method: PUT
-  deleteProduct: process.env.NEXT_PUBLIC_API+'/product', // method: DELETE
+  deleteProduct: (id: string) => process.env.NEXT_PUBLIC_API+`/product/${id}`, // method: DELETE
   addReviewToProduct: process.env.NEXT_PUBLIC_API+'/product/review', // method: POST
   getCategories: process.env.NEXT_PUBLIC_API+'/categories', // method: GET
   createCategory: process.env.NEXT_PUBLIC_API+'/categories', // method: POST

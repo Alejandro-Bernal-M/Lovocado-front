@@ -1,13 +1,15 @@
 'use client'
 import { useState } from 'react';
-import { useAppSelector } from '@/lib/hooks';
+import { useAppSelector, useAppDispatch } from '@/lib/hooks';
 import CreateProductPopup from '@/components/createProductPopup/CreateProductPopup';
 import styles from './adminProducts.module.css';
 import Product from '@/components/product/Product';
 import { ProductType, Category } from '@/lib/types';
 import EditProductPopup from '@/components/product/EditProductPopup';
+import { deleteProduct } from '@/lib/features/products/productsSlice';
 
 export default function AdminProducts() {
+  const dispatch = useAppDispatch();
   const { products, loading, error } = useAppSelector((state) => state.products);
   const { categories } = useAppSelector((state) => state.categories);
   const [displayPopup, setDisplayPopup] = useState(false);
@@ -29,6 +31,18 @@ export default function AdminProducts() {
     }
   }
 
+  function handleDelete(product: ProductType) {
+    const data = {
+      _id: product._id,
+      token: localStorage.getItem('token'),
+    };
+    try {
+      dispatch(deleteProduct(data));
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <div>
       <h1>Admin Products</h1>
@@ -44,6 +58,7 @@ export default function AdminProducts() {
         <>
         <Product key={`${product._id}-${index}`} {...product} />
         <button onClick={() => {handleEdit(product)} } >Edit</button>
+        <button onClick={() => {handleDelete(product)} } >Delete</button>
         </>
       ))}
       {editPopup && <EditProductPopup productForEdit= {productForEdit} categories={categoriesForEdit} setEditPopup={setEditPopup} />}
