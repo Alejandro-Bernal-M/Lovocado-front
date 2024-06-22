@@ -17,6 +17,7 @@ interface Category {
   parentId?: string;
   slug?: string;
   _id?: string;
+  children: Category[];
 }
 
 interface ProductCart {
