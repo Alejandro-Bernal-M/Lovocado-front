@@ -6,7 +6,7 @@ import { signOut, signIn } from '@/lib/features/user/userSlice';
 import { useEffect } from 'react';
 import { usePathname } from 'next/navigation'
 import { hideCart, displayCart, getCartItemsDB } from '@/lib/features/cart/cartSlice';
-import CartPopup from '../cart/cartPopup';
+import CartPopup from '../cart/CartPopup';
 import { getAllProducts } from '@/lib/features/products/productsSlice';
 
 export default function Navbar() {

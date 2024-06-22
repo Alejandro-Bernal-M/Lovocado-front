@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react';
 import { useAppSelector } from '@/lib/hooks';
-import CreateProductPopup from '@/components/createProductPopup/createProductPopup';
+import CreateProductPopup from '@/components/createProductPopup/CreateProductPopup';
 import styles from './adminProducts.module.css';
 import Product from '@/components/product/Product';
 import { ProductType, Category } from '@/lib/types';
