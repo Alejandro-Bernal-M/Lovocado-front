@@ -65,10 +65,15 @@ const updateProduct = createAsyncThunk(
         },
         body: product,
       });
-      if(response.status === 400 || response.status === 401) {
+      if(response.status === 401) {
         dispatch(signOut());
         window.location.href = '/session ';
         alert('Session expired, please sign in');
+        return
+      }
+
+      if(response.status === 400) {
+        alert('Error updating product');
         return
       }
 

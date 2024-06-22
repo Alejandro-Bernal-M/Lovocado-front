@@ -73,9 +73,9 @@ export default function EditProductPopup({productForEdit, categories, setEditPop
 				<input type="file" id="newImage" name="productImages" multiple/>
 				<label htmlFor="category">Category</label>
 				{categories && categories.length > 0 && (
-					<select name="category" id="category">
+					<select name="category" id="category" defaultValue={productForEdit.category._id}>
 						{categories.map((category) => (
-							<option key={category._id} value={category._id} selected={productForEdit.category._id == category._id} >{category.name}</option>
+							<option key={category._id} value={category._id} >{category.name}</option>
 						))}
 					</select>
 				)}
