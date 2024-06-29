@@ -8,6 +8,7 @@ import Product from "@/components/product/Product";
 import { removeItemQuantity } from "@/lib/features/cart/cartSlice";
 import { useState } from "react";
 import { ProductType} from "@/lib/types";
+import CheckoutButton from "@/components/checkoutButton/CheckoutButton";
 
 export default function CartPage(){
   const { items, totalProducts, totalPrices } = useAppSelector((state) => state.cart);
@@ -114,9 +115,7 @@ export default function CartPage(){
         
       </div>
     ))}
-    <button onClick={handleCheckout} >
-      Checkout
-    </button>
+    <CheckoutButton />
     <button onClick={ handleClearCart }>Clean Cart</button>
   </div>
   );
