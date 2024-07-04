@@ -3,6 +3,7 @@ import userSlice from './features/user/userSlice'
 import productsSlice from './features/products/productsSlice'
 import categoriesSlice from './features/categories/categoriesSlice'
 import cartSlice from './features/cart/cartSlice'
+import ordersSlice from './features/orders/ordersSlice'
 
 export const makeStore = () => {
   return configureStore({
@@ -10,7 +11,8 @@ export const makeStore = () => {
       user: userSlice,
       products : productsSlice,
       categories: categoriesSlice,
-      cart: cartSlice
+      cart: cartSlice,
+      orders: ordersSlice,
     }
   })
 }
