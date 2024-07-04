@@ -39,4 +39,38 @@ interface RemoveItem {
   quantity: number;
 }
 
-export type { Product as ProductType, Category, CartState, ProductCart, RemoveItem };
+type orderProduct = {
+  product: string;
+  quantity: number;
+}
+
+interface Order {
+  _id: string;
+  user?: string;
+  address: {
+    city: string;
+    country: string;
+    line1: string;
+    line2?: string;
+    postal_code: string;
+    state: string;
+  };
+  email: string;
+  name: string;
+  totalAmount: number;
+  products: orderProduct[];
+  paymentStatus: string;
+  paymentType: string;
+  orderStatus: string;
+  paymentInfo: {
+    id: string;
+    status: string;
+  };
+  createdAt: string;
+  updatedAt: string;
+}
+
+
+
+
+export type { Product as ProductType, Category, CartState, ProductCart, RemoveItem, Order };
