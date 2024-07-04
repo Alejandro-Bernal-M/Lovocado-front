@@ -5,6 +5,7 @@ import apiEndPoints from "@/utils/routes";
 export default function CheckoutButton(){
   const dispatch = useAppDispatch();
   const { items } = useAppSelector((state) => state.cart);
+  const { user } = useAppSelector((state) => state.user);
 
   const handleCheckout = async () => {
     console.log('Checkout button clicked');
@@ -15,13 +16,24 @@ export default function CheckoutButton(){
         quantity: item.quantity,
       }
     });
+    let data;
+    if(user._id){
+      data = {
+        items: productsToCheckout,
+        userId: user._id
+      }
+    }else {
+      data = {
+        items: productsToCheckout
+      }
+    }
     try {
       const response = await fetch(apiEndPoints.checkoutSession, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json; charset=utf-8'
         },
-        body: JSON.stringify({items: productsToCheckout}),
+        body: JSON.stringify(data),
       });
       if(response.status === 200){
         const result = await response.json();
