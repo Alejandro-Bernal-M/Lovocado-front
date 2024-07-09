@@ -1,10 +1,24 @@
 'use client'
+import { useState } from 'react';
 import { useAppSelector, useAppDispatch } from "@/lib/hooks";
+import { updateOrderStatus } from "@/lib/features/orders/ordersSlice";
 
 export default function Orders(){
   const dispatch = useAppDispatch();
+  const [orderStatus, setOrderStatus] = useState('');
+  const [orderId, setOrderId] = useState('');
+  const [displayOrderStatusEdit, setDisplayOrderStatusEdit] = useState(false);
   const { orders } = useAppSelector((state) => state.orders);
   const { products } = useAppSelector((state) => state.products);
+  const { token } = useAppSelector((state) => state.user);
+
+  function handleUpdateOrderStatus({ orderId, orderStatus }: { orderId: string, orderStatus: string }) {
+    if (!orderId || !orderStatus) {
+      return;
+    }
+    dispatch(updateOrderStatus({ orderId, orderStatus, token }));
+  }
+
   return (
     <div>
       <h1>Orders</h1>
@@ -60,7 +74,32 @@ export default function Orders(){
               <td>{new Date(order.createdAt).toString()}</td>
               <td>{new Date(order.updatedAt).toString()}</td>
               <td>
-                <button>Update status</button>
+                {displayOrderStatusEdit && (order._id == orderId) && (
+                  <select
+                    value={orderStatus}
+                    onChange={(e) => {
+                      setOrderStatus(e.target.value);
+                    }}
+                  >
+                    <option value="Order Placed">Order Placed</option>
+                    <option value="Order Accepted">Order Accepted</option>
+                    <option value="Order Processing">Order Processing</option>
+                    <option value="Order Shipped">Order Shipped</option>
+                    <option value="Order Delivered">Order Delivered</option>
+                    <option value="Order Cancelled">Order Cancelled</option>
+                  </select>
+                )}
+                {displayOrderStatusEdit && (
+                  <button
+                    onClick={() => {
+                      handleUpdateOrderStatus({ orderId, orderStatus });
+                      setDisplayOrderStatusEdit(false);
+                    }}
+                  >
+                    Update
+                  </button>
+                )}
+                <button onClick={() => {setDisplayOrderStatusEdit(!displayOrderStatusEdit); setOrderId(order._id);}} >Update status</button>
               </td>
             </tr>
           ))}
