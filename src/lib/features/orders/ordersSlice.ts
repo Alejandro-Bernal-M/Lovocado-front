@@ -35,6 +35,33 @@ const getOrders = createAsyncThunk(
   }
 );
 
+const updateOrderStatus = createAsyncThunk(
+  "orders/updateOrderStatus",
+  async (data: any, { dispatch }) => {
+    const { orderId, orderStatus, token } = data;
+    try {
+      const response = await fetch(apiEndPoints.updateOrderStatus(orderId), {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+          'Authorization': 'Bearer '+token
+        },
+        body: JSON.stringify({ orderStatus })
+      });
+      if(response.status === 401){
+        console.log('Please sign in to update order status')
+        dispatch(signOut());
+        window.location.href = '/';
+        return
+      }
+      if(response.status === 200){
+        return response.json();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  });
+
 const ordersSlice = createSlice({
   initialState,
   name: "orders",
@@ -51,8 +78,24 @@ const ordersSlice = createSlice({
       state.loadingOrders = false;
       state.error = action.error;
     });
+    builder.addCase(updateOrderStatus.pending, (state) => {
+      state.loadingOrders = true;
+    });
+    builder.addCase(updateOrderStatus.fulfilled, (state, action) => {
+      state.loadingOrders = false;
+      state.orders = state.orders.map((order) => {
+        if(order._id === action.payload.updatedOrder._id){
+          return action.payload.updatedOrder;
+        }
+        return order;
+      });
+    });
+    builder.addCase(updateOrderStatus.rejected, (state, action) => {
+      state.loadingOrders = false;
+      state.error = action.error;
+    });
   }
 })
 
 export default ordersSlice.reducer;
-export { getOrders };
+export { getOrders, updateOrderStatus };
