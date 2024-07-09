@@ -21,6 +21,7 @@ const apiEndPoints = {
   saveCart: process.env.NEXT_PUBLIC_API+'/cart/save', // method: POST
   checkoutSession: process.env.NEXT_PUBLIC_API+'/stripe/create-session', // method: POST
   getOrders: process.env.NEXT_PUBLIC_API+'/orders', // method: GET
+  updateOrderStatus: (id: string) =>  process.env.NEXT_PUBLIC_API+`/order/${id}`, // method: PUT
 }
 
 export default apiEndPoints;
