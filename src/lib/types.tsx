@@ -61,7 +61,7 @@ interface Order {
   products: orderProduct[];
   paymentStatus: string;
   paymentType: string;
-  orderStatus: string;
+  orderStatus: ['Order Placed', 'Order Accepted', 'Order Processing', 'Order Shipped', 'Order Delivered', 'Order Cancelled'];
   paymentInfo: {
     id: string;
     status: string;
