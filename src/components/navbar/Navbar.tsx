@@ -8,6 +8,7 @@ import { usePathname } from 'next/navigation'
 import { hideCart, displayCart, getCartItemsDB } from '@/lib/features/cart/cartSlice';
 import CartPopup from '../cart/CartPopup';
 import { getAllProducts } from '@/lib/features/products/productsSlice';
+import { getHomeSections } from '@/lib/features/homeSection/homeSectionsSlice';
 
 export default function Navbar() {
   const {user} = useAppSelector((state) => state.user);
@@ -32,6 +33,7 @@ export default function Navbar() {
         }
       }
       dispatch(getAllProducts());
+      dispatch(getHomeSections());
     }
   }, []);
 
