@@ -22,6 +22,10 @@ const apiEndPoints = {
   checkoutSession: process.env.NEXT_PUBLIC_API+'/stripe/create-session', // method: POST
   getOrders: process.env.NEXT_PUBLIC_API+'/orders', // method: GET
   updateOrderStatus: (id: string) =>  process.env.NEXT_PUBLIC_API+`/order/${id}`, // method: PUT
+  createHomeSection: process.env.NEXT_PUBLIC_API+'/homeSection/create', // method: POST
+  getHomeSections: process.env.NEXT_PUBLIC_API+'/homeSections', // method: GET
+  updateHomeSection: (id: string) => process.env.NEXT_PUBLIC_API+`/homeSection/update/${id}`, // method: PUT
+  deleteHomeSection: (id: string) => process.env.NEXT_PUBLIC_API+`/homeSection/delete/${id}`, // method: DELETE
 }
 
 export default apiEndPoints;
