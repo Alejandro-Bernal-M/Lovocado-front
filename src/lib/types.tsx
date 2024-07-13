@@ -70,7 +70,14 @@ interface Order {
   updatedAt: string;
 }
 
+interface HomeSection {
+  _id: string;
+  title?: string;
+  paragraphs?: string[];
+  image?: string;
+  order?: number;
+}
 
 
 
-export type { Product as ProductType, Category, CartState, ProductCart, RemoveItem, Order };
+export type { Product as ProductType, Category, CartState, ProductCart, RemoveItem, Order, HomeSection };
