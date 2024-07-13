@@ -31,6 +31,9 @@ export default function AdminPage() {
           <li>
             <Link href="/admin/orders">Orders</Link>
           </li>
+          <li>
+            <Link href="/admin/home-sections">Home Sections</Link>
+          </li>
         </ul>
       </div>
     </div>
