@@ -16,7 +16,7 @@ export default function CreateCategoryPopup() {
 
   return (
     <div>
-      <form encType="multipart/form-data"onSubmit={handleSubmit}>
+      <form encType="multipart/form-data" onSubmit={handleSubmit}>
         <label htmlFor="name">Name</label>
         <input type="text" id="name" name="name" required />
         <label htmlFor='image'>Image</label>
