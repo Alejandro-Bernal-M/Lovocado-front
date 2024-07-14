@@ -6,6 +6,7 @@ import { useState } from 'react';
 
 export default function EditHomeSectionPopup({homeSection}: {homeSection: HomeSection}){
   const [paragraphs, setParagraphs] = useState(homeSection.paragraphs);
+  const [removeImage, setRemoveImage] = useState(false);
   const dispatch = useAppDispatch();
   const { token } = useAppSelector((state) => state.user);
 
@@ -18,7 +19,8 @@ export default function EditHomeSectionPopup({homeSection}: {homeSection: HomeSe
     });
   }
 
-  function handleAddParagraph(){
+  function handleAddParagraph(event: React.MouseEvent<HTMLButtonElement, MouseEvent>){
+    event.preventDefault();
     setParagraphs(prevParagraphs => {
       if(prevParagraphs){
         return [...prevParagraphs, ''];
@@ -27,6 +29,7 @@ export default function EditHomeSectionPopup({homeSection}: {homeSection: HomeSe
   }
 
   function handleParagraphChange(event: React.ChangeEvent<HTMLTextAreaElement>, index: number){
+    event.preventDefault();
     setParagraphs(prevParagraphs => {
       if(prevParagraphs){
         const updatedParagraphs = prevParagraphs.map((paragraph, i) => {
@@ -38,6 +41,11 @@ export default function EditHomeSectionPopup({homeSection}: {homeSection: HomeSe
         return updatedParagraphs;
       }
     });
+  }
+
+  function handleImageRemoval(event: React.MouseEvent<HTMLButtonElement, MouseEvent>){
+    event.preventDefault();
+    setRemoveImage(prevState => !prevState);
   }
 
   function handleUpdateHomeSection(event: React.FormEvent<HTMLFormElement>){
@@ -55,6 +63,11 @@ export default function EditHomeSectionPopup({homeSection}: {homeSection: HomeSe
     }
     formData.append('paragraphs', JSON.stringify(newParagraphs));
     formData.append('_id', homeSection._id);
+    if(removeImage){
+      formData.delete('image');
+      formData.append('removeImage', 'true');
+    }
+    
     dispatch(updateHomeSection({homeSection: formData, token}));
   }
 
@@ -67,6 +80,10 @@ export default function EditHomeSectionPopup({homeSection}: {homeSection: HomeSe
       <input type='number' id='order' name='order' defaultValue={homeSection.order} />
       <label htmlFor='image'>Image</label>
       <input type='file' id='image' name='image' accept='image/*' />
+      <button onClick={ handleImageRemoval} >
+        {removeImage ? 'Undo remove image' : 'Remove image'}
+      </button>
+
       {paragraphs && paragraphs.map((paragraph, index) => {
         return (
           <div key={index}>
