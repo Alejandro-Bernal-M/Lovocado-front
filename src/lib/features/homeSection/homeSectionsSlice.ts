@@ -130,8 +130,8 @@ const homeSectionsSlice = createSlice({
     builder.addCase(updateHomeSection.fulfilled, (state, action) => {
       state.loading = false;
       state.homeSections = state.homeSections.map((homeSection) => {
-        if (homeSection._id === action.payload.homeSection._id) {
-          return action.payload.homeSection;
+        if (homeSection._id === action.payload.updatedHomeSection._id) {
+          return action.payload.updatedHomeSection;
         }
         return homeSection;
       });
