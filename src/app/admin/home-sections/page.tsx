@@ -4,12 +4,18 @@ import CreateHomeSectionPopup from "@/components/homeSection/CreateHomeSectionPo
 import { useState } from "react";
 import { HomeSection } from "@/lib/types";
 import EditHomeSectionPopup from "@/components/homeSection/EditHomeSectionPopup";
+import { deleteHomeSection } from "@/lib/features/homeSection/homeSectionsSlice";
 
 export default function homeSections(){
+  const dispatch = useAppDispatch();
+  const { token } = useAppSelector((state) => state.user);
   const { homeSections } = useAppSelector((state) => state.homeSections);
   const [showPopup, setShowPopup] = useState(false);
   const [showUpdatePopup, setShowUpdatePopup] = useState(false);
   const [selectedHomeSection, setSelectedHomeSection] = useState<HomeSection | null>(null);
+  function handleDeleteHomeSection(id: string){
+    dispatch(deleteHomeSection({homeSectionId: id, token}));
+  }
   return (
     <div>
       <h1>Home Sections</h1>
@@ -28,6 +34,9 @@ export default function homeSections(){
               setSelectedHomeSection(section);
               setShowUpdatePopup(!showUpdatePopup);
             }}>Edit</button>
+            <button onClick={() => {
+              handleDeleteHomeSection(section._id);
+            }}>Delete</button>
           </div>
         )
       })}

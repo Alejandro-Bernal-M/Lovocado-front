@@ -146,7 +146,7 @@ const homeSectionsSlice = createSlice({
     });
     builder.addCase(deleteHomeSection.fulfilled, (state, action) => {
       state.loading = false;
-      state.homeSections = state.homeSections.filter((homeSection) => homeSection._id !== action.payload.homeSection._id);
+      state.homeSections = state.homeSections.filter((homeSection) => homeSection._id !== action.payload.id);
     });
     builder.addCase(deleteHomeSection.rejected, (state, action) => {
       state.loading = false;
