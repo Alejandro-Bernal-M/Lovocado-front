@@ -49,40 +49,60 @@ export default function Navbar() {
     }
   }
 
+  function active() {
+    console.log('active');
+    const links = document.querySelectorAll('a');
+    links.forEach(link => {
+      if (link.href === window.location.href) {
+        link.classList.add('active');
+      } else {
+        link.classList.remove('active');
+      }
+    });
+  }
+
   useEffect(() => {
     secureRoute();
     adminRoute();
+    active();
   }
   , [pathName]);
   
   return (
-    <nav className={styles.navbar}>
-      <div className={styles.navbar__logo} >logo</div>
-      <ul className={styles.navbar__links} >
-        <li className={styles.navbar__link}>
-          <Link href="/">Home</Link>
-        </li>
-        <li className={styles.navbar__link}>
-          <Link href="/products">Products</Link>
-        </li>
-        <li className={styles.navbar__link}>
-          <button onClick={() => showCart ? dispatch(hideCart()) : dispatch(displayCart())}>Cart</button>
-        </li>
-        {showCart && <CartPopup />}
-        <li className={styles.navbar__link}>
-          {token ? (
-            <button onClick={handleSignOut}>Signout</button>
-          ) : (
-            <Link href="/session">Signin</Link>
-          )
-        }
-        </li>
-        { user.role === 'admin' && (
+    <nav className={styles.navbar__outside}>
+      <div className={styles.navbar__top}>
+        <p>
+          Free Shipping for orders over $75
+        </p>
+      </div>
+      <div className={styles.navbar}>
+        <div className={styles.navbar__logo} >logo</div>
+        <ul className={styles.navbar__links} >
           <li className={styles.navbar__link}>
-            <Link href="/admin" >Admin</Link>
+            <Link href="/">Home</Link>
           </li>
-        )}
-      </ul>
+          <li className={styles.navbar__link}>
+            <Link href="/products">Products</Link>
+          </li>
+          <li className={styles.navbar__link}>
+            <button onClick={() => showCart ? dispatch(hideCart()) : dispatch(displayCart())}>Cart</button>
+          </li>
+          {showCart && <CartPopup />}
+          <li className={styles.navbar__link}>
+            {token ? (
+              <button onClick={handleSignOut}>Signout</button>
+            ) : (
+              <Link href="/session">Signin</Link>
+            )
+          }
+          </li>
+          { user.role === 'admin' && (
+            <li className={styles.navbar__link}>
+              <Link href="/admin" >Admin</Link>
+            </li>
+          )}
+        </ul>
+      </div>
     </nav>
   );
 }

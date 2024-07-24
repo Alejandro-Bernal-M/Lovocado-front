@@ -1,7 +1,20 @@
+:root {
+  --primary-color: #556b2f; 
+  --secondary-color: #4e4b2c;
+  --font-color-1: #4d4d4d;
+  --font-color-2: #eafff1;
+  --background: #f4f4f4;
+  --details-1: #6f4f28;
+  --details-2: #313131;
+}
+
 * {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+  font-family: 'Futura', sans-serif;
+  color: var(--font-color-1);
+  font-size: 1rem;
 }
 
 html,
@@ -15,3 +28,7 @@ a {
   text-decoration: none;
 }
 
+.active {
+  color: var(--primary-color) !important;
+  opacity: 1 !important;
+}
