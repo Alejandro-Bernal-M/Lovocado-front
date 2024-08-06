@@ -9,6 +9,7 @@ import { hideCart, displayCart, getCartItemsDB } from '@/lib/features/cart/cartS
 import CartPopup from '../cart/CartPopup';
 import { getAllProducts } from '@/lib/features/products/productsSlice';
 import { getHomeSections } from '@/lib/features/homeSection/homeSectionsSlice';
+import Image from 'next/image'; 
 
 export default function Navbar() {
   const {user} = useAppSelector((state) => state.user);
@@ -50,10 +51,10 @@ export default function Navbar() {
   }
 
   function active() {
-    console.log('active');
     const links = document.querySelectorAll('a');
     links.forEach(link => {
       if (link.href === window.location.href) {
+        if(link.classList.contains('no_active')) return;
         link.classList.add('active');
       } else {
         link.classList.remove('active');
@@ -85,12 +86,14 @@ export default function Navbar() {
             <Link href="/products">Products</Link>
           </li>
           <li className={styles.navbar__link}>
-            <button onClick={() => showCart ? dispatch(hideCart()) : dispatch(displayCart())}>Cart</button>
+            <button className='button_transparent' onClick={() => showCart ? dispatch(hideCart()) : dispatch(displayCart())}>
+              <Image src="/cart.svg" alt="cart" width={20} height={20} /> {/* Use the Image component as a JSX component */}
+            </button>
           </li>
           {showCart && <CartPopup />}
           <li className={styles.navbar__link}>
             {token ? (
-              <button onClick={handleSignOut}>Signout</button>
+              <button className='button_transparent' onClick={handleSignOut}>Signout</button>
             ) : (
               <Link href="/session">Signin</Link>
             )

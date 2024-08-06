@@ -32,3 +32,29 @@ a {
   color: var(--primary-color) !important;
   opacity: 1 !important;
 }
+
+.button_transparent {
+  background-color: transparent;
+  border: none;
+  color: var(--details-1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+}
+
+.button_style_1 {
+  background-color: var(--primary-color);
+  color: var(--font-color-2);
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.button_style_1:hover {
+  background-color: var(--secondary-color);
+}
+
+.button_style_1 a:active {
+  color: var(--font-color-2) !important;
+}
