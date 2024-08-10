@@ -17,7 +17,7 @@ export default function Products() {
   const [categoryTittle, setCategoryTittle] = useState('' as string);
   const [ productsProccessed, setProductsProccessed ] = useState(false);
 
-  const handleSelect = (id: any, name: string, all: boolean) => {
+  const handleSelect = (id: any, name: string, all: boolean, element: HTMLLIElement ) => {
     setLoadingProducts(true);
     if (all) {
       setSelectedProducts(products);
@@ -29,6 +29,27 @@ export default function Products() {
     }
     setLoadingProducts(false);
     setProductsProccessed(true);
+    element.classList.add('active');
+    let allElements = document.querySelectorAll('.cat_li');
+    allElements.forEach((li) => {
+      if (li !== element) {
+        li.classList.remove('active');
+      }
+    });
+  }
+
+  function displaySubCategories(event: React.MouseEvent<HTMLLIElement>) {
+    console.log('displaying subcategories');
+    const element = event.currentTarget as HTMLLIElement;
+    const subCategories = element.nextElementSibling as HTMLUListElement;
+    const top = element.getBoundingClientRect().top;
+    const left = element.getBoundingClientRect().left;
+    if (subCategories) {
+      subCategories.classList.toggle('visible');
+      subCategories.style.top = `${top + 20}px`;
+      subCategories.style.left = `${left -15 }px`;
+    }
+
   }
 
   useEffect(() => {
@@ -41,30 +62,32 @@ export default function Products() {
   }, []);
 
   return (
-    <div>
-      <h1> Our products</h1>
-      { categories.length > 0 && (
-        <ul className={styles.cat_ul}>
-          <li className="cat_li" onClick={() => {handleSelect(0, '', true)}} >All products</li>
-          {categories.map((category) => (
-            <>
-            <li className="cat_li" key={category._id} onClick={() => {handleSelect(category._id, category.name, false)}}>{category.name}</li>
-            {category.children && category.children.length > 0 && (
-              <ul>
-                {category.children.map((child) => (
-                  <li key={child._id} onClick={() => {handleSelect(child._id, child.name, false)}}>{child.name}</li>
-                ))}
-              </ul>
-            )
-            }
-            </>
-          ))}
-        </ul>
-      )}
-      <h2>{categoryTittle != '' ? categoryTittle : "All our" } products</h2>
+    <div className={styles.section} >
+      <div className={styles.categories_section}>
+        <h1 className={styles.page_title} > Our products</h1>
+        { categories.length > 0 && (
+          <ul className={styles.cat_ul}>
+            <li className="cat_li" onClick={(event: React.MouseEvent<HTMLLIElement>) => {handleSelect(0, '', true, event.currentTarget)}} >All products</li>
+            {categories.map((category) => (
+              <>
+              <li className="cat_li" key={category._id} onClick={(event) => {handleSelect(category._id, category.name, false, event.currentTarget as HTMLLIElement)}} onMouseEnter={displaySubCategories}>{category.name}</li>
+              {category.children && category.children.length > 0 && (
+                <ul className="cat_li_sub">
+                  {category.children.map((child) => (
+                    <li key={child._id} className="cat_li cat_li_sub_li" onClick={(event: React.MouseEvent<HTMLLIElement>) => {handleSelect(child._id, child.name, false, event.currentTarget as HTMLLIElement)}}>{child.name}</li>
+                  ))}
+                </ul>
+              )
+              }
+              </>
+            ))}
+          </ul>
+        )}
+      </div>
+      <h2 className={styles.subtitle} >{categoryTittle != '' ? categoryTittle : "All our" } products</h2>
       {loadingProducts && <p>Loading...</p>}
       {error && <p> We had an error loading our products, please try again</p>}
-      <div className={styles.products}>
+      <div className={styles.products_section}>
         {selectedProducts.length > 0 ? selectedProducts.map((product) => (
           <Product key={product._id} {...product} />
         ))

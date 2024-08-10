@@ -4,6 +4,7 @@
   --font-color-1: #4d4d4d;
   --font-color-2: #eafff1;
   --background: #f4f4f4;
+  --background-2: #e0e0e0;
   --details-1: #6f4f28;
   --details-2: #313131;
 }
@@ -57,4 +58,43 @@ a {
 
 .button_style_1 a:active {
   color: var(--font-color-2) !important;
+}
+
+.cat_li {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 10px;
+  cursor: pointer;
+  justify-content: center;
+  color: var(--secondary-color);
+}
+
+.cat_li:hover {
+  color: var(--primary-color);
+}
+
+.cat_li.active {
+  color: var(--primary-color);
+}
+
+.cat_li_sub {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  position: absolute;
+  background-color: var(--background-2);
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  display: none;
+}
+
+.cat_li_sub:hover {
+  display: block;
+}
+
+.visible {
+  display: block;
 }
