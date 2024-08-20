@@ -17,21 +17,21 @@ export default function AdminPage() {
   }, []);
 
   return (
-    <div>
-      <h1>Admin Page</h1>
+    <div className="adminContainer">
+      <h1 className="adminTitle">Admin Page</h1>
 
       <div>
-        <ul>
-          <li>
+        <ul className="adminList">
+          <li className="adminListItem">
             <Link href="/admin/products">Products</Link>
           </li>
-          <li>
+          <li className="adminListItem">
             <Link href="/admin/categories">Categories</Link>
           </li>
-          <li>
+          <li className="adminListItem">
             <Link href="/admin/orders">Orders</Link>
           </li>
-          <li>
+          <li className="adminListItem">
             <Link href="/admin/home-sections">Home Sections</Link>
           </li>
         </ul>

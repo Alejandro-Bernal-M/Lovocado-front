@@ -20,11 +20,7 @@ export default function AdminProducts() {
   function handleEdit(product: ProductType) {
     if (product) {
       setProductForEdit(product);
-      if (categories.length > 0) {
-        setCategoriesForEdit(categories);
-      } else {
-        setCategoriesForEdit([]);
-      }
+      setCategoriesForEdit(categories.length > 0 ? categories : []);
       setEditPopup(true);
     } else {
       console.error('Invalid product:', product);
@@ -44,10 +40,12 @@ export default function AdminProducts() {
   }
 
   return (
-    <div>
+    <div className={styles.adminProductsContainer}>
       <h1>Admin Products</h1>
-      <button onClick={() => setDisplayPopup(!displayPopup)}>Create Product</button>
-      {displayPopup && <CreateProductPopup />}
+      <button className={styles.createProductButton} onClick={() => setDisplayPopup(!displayPopup)}>
+        Create Product
+      </button>
+      {displayPopup && <CreateProductPopup setDisplayPopup={setDisplayPopup} />}
       {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
       <div>
@@ -55,13 +53,13 @@ export default function AdminProducts() {
       </div>
       {products.length === 0 && !loading && <p>No products found</p>}
       {products.length > 0 && products.map((product, index) => (
-        <>
-        <Product key={`${product._id}-${index}`} {...product} />
-        <button onClick={() => {handleEdit(product)} } >Edit</button>
-        <button onClick={() => {handleDelete(product)} } >Delete</button>
-        </>
+        <div key={`${product._id}-${index}`} className={styles.productContainer}>
+          <Product {...product} />
+          <button onClick={() => handleEdit(product)} className={styles.editButton}>Edit</button>
+          <button onClick={() => handleDelete(product)} className={styles.deleteButton}>Delete</button>
+        </div>
       ))}
-      {editPopup && <EditProductPopup productForEdit= {productForEdit} categories={categoriesForEdit} setEditPopup={setEditPopup} />}
+      {editPopup && <EditProductPopup productForEdit={productForEdit} categories={categoriesForEdit} setEditPopup={setEditPopup} />}
     </div>
   );
 }
