@@ -45,7 +45,7 @@ export default function Signin() {
 
   return (
     <div className="adminContainer">
-      <h1 className="adminTitle">Signin Page</h1>
+      <h1 className="adminTitle">Signin</h1>
       <form className="signinForm" encType="multipart/form-data" onSubmit={handleSignin}>
         <input className="signinInput" name="email" type="email" placeholder="Email" />
         <input className="signinInput" name="password" type="password" placeholder="Password" />
