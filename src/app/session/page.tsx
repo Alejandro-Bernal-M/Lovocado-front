@@ -7,16 +7,16 @@ export default function Session() {
   const [signin, setSignin] = useState(true);
 
   return (
-    <div>
+    <div className="session-bg">
       {signin ?
         <>
           <Signin /> 
-          <button onClick={() => setSignin(false)}>Do not have an account? Signup </button>
+          <button className= "session-btn" onClick={() => setSignin(false)}>Do not have an account? Signup </button>
         </>
         :
         <>
           <Signup />
-          <button onClick={() => setSignin(true)}>Already have an account? Signin </button>
+          <button className= "session-btn" onClick={() => setSignin(true) } >Already have an account? Signin </button>
         </>
         }
     </div>
