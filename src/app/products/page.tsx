@@ -39,7 +39,6 @@ export default function Products() {
   }
 
   function displaySubCategories(event: React.MouseEvent<HTMLLIElement>) {
-    console.log('displaying subcategories');
     const element = event.currentTarget as HTMLLIElement;
     const subCategories = element.nextElementSibling as HTMLUListElement;
     const top = element.getBoundingClientRect().top;
@@ -70,7 +69,7 @@ export default function Products() {
             <li className="cat_li" onClick={(event: React.MouseEvent<HTMLLIElement>) => {handleSelect(0, '', true, event.currentTarget)}} >All products</li>
             {categories.map((category) => (
               <>
-              <li className="cat_li" key={category._id} onClick={(event) => {handleSelect(category._id, category.name, false, event.currentTarget as HTMLLIElement)}} onMouseEnter={displaySubCategories}>{category.name}</li>
+              <li className="cat_li" key={category._id} onClick={(event) => {handleSelect(category._id, category.name, false, event.currentTarget as HTMLLIElement)}} onMouseEnter={displaySubCategories} onMouseLeave={displaySubCategories}>{category.name} </li>
               {category.children && category.children.length > 0 && (
                 <ul className="cat_li_sub">
                   {category.children.map((child) => (
