@@ -1,6 +1,7 @@
 import { useAppDispatch, useAppSelector } from "@/lib/hooks"
 import { clearCart, clearCartDB  } from "@/lib/features/cart/cartSlice";
 import apiEndPoints from "@/utils/routes";
+import styles from "./CheckoutButton.module.css"
 
 export default function CheckoutButton(){
   const dispatch = useAppDispatch();
@@ -48,7 +49,7 @@ export default function CheckoutButton(){
     };
   }
   return (
-    <button className="checkout-button" onClick={handleCheckout} >
+    <button className={styles.checkoutButton} onClick={handleCheckout}  >
       Checkout
     </button>
   )

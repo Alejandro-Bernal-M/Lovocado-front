@@ -9,6 +9,7 @@ import { removeItemQuantity } from "@/lib/features/cart/cartSlice";
 import { useState } from "react";
 import { ProductType} from "@/lib/types";
 import CheckoutButton from "@/components/checkoutButton/CheckoutButton";
+import styles from './CartPage.module.css';
 
 export default function CartPage(){
   const { items, totalProducts, totalPrices } = useAppSelector((state) => state.cart);
@@ -86,37 +87,44 @@ export default function CartPage(){
   }
 
   return (
-    <div>
-    <h1>Your Cart</h1>
-    <p>Total Products: {totalProducts}</p>
-    <p>Total Price: {totalPrices}</p>
-    {items.length > 0 && items.map((item) => (
-      <div key={item._id}>
-        { products.map((product:ProductType, index) => {
-          if(product._id === item._id){
-            return(
-              <> 
-              <Product key={index} {...product} />
-              { item.quantity > 0 && (
-                <>
-                  <span>Select the quantity to remove</span>
-                  <input type="number" id={item._id + '-remove-value'} max={item.quantity} defaultValue={item.quantity} />
-                  <button onClick={ () => handleRemoveFromCart(item._id) }>Remove products</button>
-                </>
-              ) }
-              <p>{item.quantity} x {product.name}</p>
-              <p>Unitary price: {item.price}</p>
-              <p>Subtotal: {item.price * item.quantity}</p>
-              <button onClick={ () => handleRemoveItemFromCart(item._id) }>Remove this product</button>
-              </> 
-            )
-          }}
-        )}
-        
+    <div className={styles.cartContainer}>
+      <h1 className={styles.cartTitle}>Your Cart</h1>
+      <p>Total Products: {totalProducts}</p>
+      <p>Total Price: {totalPrices}</p>
+      {items.length > 0 && items.map((item) => (
+        <div key={item._id} className={styles.cartItem}>
+          { products.map((product:ProductType, index) => {
+            if(product._id === item._id){
+              return(
+                <> 
+                <Product key={index} {...product} />
+                { item.quantity > 0 && (
+                  <>
+                    <span>Select the quantity to remove</span>
+                    <div className={styles.cartItemQuantity}>
+                      <input type="number" id={item._id + '-remove-value'} max={item.quantity} defaultValue={item.quantity} />
+                      <button onClick={ () => handleRemoveFromCart(item._id) }  className={styles.cartButton}>Remove products</button>
+                    </div>
+                  </>
+                ) }
+                <div className={styles.cartItemDetails}>
+                  <p className={styles.cartItemName}>{item.quantity} x {product.name}</p>
+                  <p className={styles.cartItemPrice}>Unitary price: {item.price}</p>
+                  <p className={styles.cartItemPrice}>Subtotal: {item.price * item.quantity}</p>
+                </div>
+                <button onClick={ () => handleRemoveItemFromCart(item._id) } className={styles.cartButton}>Remove this product</button>
+                </> 
+              )
+            }}
+          )}
+          
+        </div>
+      ))}
+      <div className={styles.cartButtons}>
+        <CheckoutButton  />
+        <button onClick={ handleClearCart } className={styles.cartButton}>Clean Cart</button>
       </div>
-    ))}
-    <CheckoutButton />
-    <button onClick={ handleClearCart }>Clean Cart</button>
-  </div>
+      <p className={styles.cartTotal}>Total Price: {totalPrices}</p>
+    </div>
   );
 }
